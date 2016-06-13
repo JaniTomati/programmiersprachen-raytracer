@@ -36,6 +36,40 @@ TEST_CASE("Sphere: gets member rad_ (radius)", "[aufgabe5.2]") {
   REQUIRE(4.3f == s3.radius());
 }
 
+TEST_CASE("Sphere: sets member ctr_ (center)", "[aufgabe5.2]") {
+  Sphere s1 {}; 
+  s1.center({1.0f, 1.0f, 1.0f});
+  REQUIRE(1.0f == s1.center().x);
+  REQUIRE(1.0f == s1.center().y);
+  REQUIRE(1.0f == s1.center().z);
+
+  Sphere s2 {{0.4f, 2.3f, 1.2f}, 4.3f};
+  s2.center({3.4f, 4.2f, -1.0f});
+  REQUIRE(3.4f == s2.center().x);
+  REQUIRE(4.2f == s2.center().y);
+  REQUIRE(-1.0f == s2.center().z);
+
+  Sphere s3 {{6.9f, 4.2f, -1.2f}, 4.3f};
+  s3.center({9.1f, -6.9f, -10.2f});
+  REQUIRE(9.1f == s3.center().x);
+  REQUIRE(-6.9f == s3.center().y);
+  REQUIRE(-10.2f == s3.center().z);
+}
+
+TEST_CASE("Sphere: sets member rad_ (radius)", "[aufgabe5.2]") {
+  Sphere s1 {}; 
+  s1.radius(4.2f);
+  REQUIRE(4.2f == s1.radius());
+
+  Sphere s2 {{0.4f, 2.3f, 1.2f}, -4.3f};
+  s2.radius(-6.29f);
+  REQUIRE(-6.29f == s2.radius());
+
+  Sphere s3 {{6.9f, 4.2f, -1.2f}, 4.3f};
+  s3.radius(2.811f);
+  REQUIRE(2.811f == s3.radius());
+}
+
 TEST_CASE("Sphere: gets area of sphere object", "[aufgabe5.2]") {
   Sphere s1 {};
   REQUIRE(0.0f == s1.area());
