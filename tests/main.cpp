@@ -202,6 +202,100 @@ TEST_CASE("Box: gets volume of box object", "[aufgabe5.2]") {
   REQUIRE(Approx(6.67f) == b4.volume());
 }
 
+/* ------------------ Aufgabe 5.3 ------------------ */
+
+TEST_CASE("Box: constructor tests", "[aufgabe5.3]") {
+  Box b1 {};
+  REQUIRE(0.0f == b1.minimum().x);
+  REQUIRE(0.0f == b1.minimum().y);
+  REQUIRE(0.0f == b1.minimum().z);
+
+  REQUIRE(0.0f == b1.maximum().x);
+  REQUIRE(0.0f == b1.maximum().y);
+  REQUIRE(0.0f == b1.maximum().z);
+
+  REQUIRE("Shape" == b1.name());
+
+  REQUIRE(0.0f == b1.color().r);
+  REQUIRE(0.0f == b1.color().g);
+  REQUIRE(0.0f == b1.color().b);
+
+
+  Box b2 {{1.0f, 2.3f, 4.1f}, {0.0f, 2.5f, 1.2f}};
+  REQUIRE(1.0f == b2.minimum().x);
+  REQUIRE(2.3f == b2.minimum().y);
+  REQUIRE(4.1f == b2.minimum().z);
+
+  REQUIRE(0.0f == b2.maximum().x);
+  REQUIRE(2.5f == b2.maximum().y);
+  REQUIRE(1.2f == b2.maximum().z);
+
+  REQUIRE("Shape" == b2.name());
+
+  REQUIRE(0.0f == b2.color().r);
+  REQUIRE(0.0f == b2.color().g);
+  REQUIRE(0.0f == b2.color().b);
+
+
+  Box b3 {"Box 3", {1.0f, 0.3f, 0.5f}, {-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}};
+  REQUIRE(-1.0f == b3.minimum().x);
+  REQUIRE(-4.3f == b3.minimum().y);
+  REQUIRE(5.6f == b3.minimum().z);
+
+  REQUIRE(-9.0f == b3.maximum().x);
+  REQUIRE(1.5f == b3.maximum().y);
+  REQUIRE(-2.2f == b3.maximum().z);
+
+  REQUIRE("Box 3" == b3.name());
+
+  REQUIRE(1.0f == b3.color().r);
+  REQUIRE(0.3f == b3.color().g);
+  REQUIRE(0.5f == b3.color().b);
+
+}
+
+TEST_CASE("Sphere: constructor tests", "[aufgabe5.3]") {
+  Sphere s1 {};
+  REQUIRE(0.0f == s1.center().x);
+  REQUIRE(0.0f == s1.center().y);
+  REQUIRE(0.0f == s1.center().z);
+
+  REQUIRE(0.0f == s1.radius());
+
+  REQUIRE("Shape" == s1.name());
+
+  REQUIRE(0.0f == s1.color().r);
+  REQUIRE(0.0f == s1.color().g);
+  REQUIRE(0.0f == s1.color().b);
+  
+  Sphere s2 {{0.4f, 2.3f, 1.2f}, 4.3f};
+  REQUIRE(0.4f == s2.center().x);
+  REQUIRE(2.3f == s2.center().y);
+  REQUIRE(1.2f == s2.center().z);
+
+  REQUIRE(4.3f == s2.radius());
+
+  REQUIRE("Shape" == s2.name());
+
+  REQUIRE(0.0f == s2.color().r);
+  REQUIRE(0.0f == s2.color().g);
+  REQUIRE(0.0f == s2.color().b);
+
+  Sphere s3 {"Sphere 3", {0.9f, 0.35f, 0.2f}, {6.9f, 4.2f, -1.2f}, -6.9f};
+  REQUIRE(6.9f == s3.center().x);
+  REQUIRE(4.2f == s3.center().y);
+  REQUIRE(-1.2f == s3.center().z);
+
+  REQUIRE(-6.9f == s3.radius());
+
+  REQUIRE("Sphere 3" == s3.name());
+
+  REQUIRE(0.9f == s3.color().r);
+  REQUIRE(0.35f == s3.color().g);
+  REQUIRE(0.2f == s3.color().b);
+
+}
+
 /* ------------------ Main ------------------ */
 
 int main(int argc, char *argv[]) {
