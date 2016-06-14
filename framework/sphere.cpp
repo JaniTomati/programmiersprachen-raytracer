@@ -4,13 +4,13 @@
   
     // default constructor
   Sphere::Sphere() :
-  Shape {},
+  Shape {"Sphere", {0.0f, 0.0f, 0.0f}},
   ctr_ {0.0f, 0.0f, 0.0f}, 
   rad_ {0.0f} {}
 
     // Constructor takes center and radius
   Sphere::Sphere(glm::vec3 const& ctr, float rad) :
-  Shape {}, // name and color default 
+  Shape {"Sphere", {0.0f, 0.0f, 0.0f}}, // name and color default 
   ctr_ {ctr},
   rad_ {rad} {}
 

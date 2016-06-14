@@ -82,6 +82,10 @@ TEST_CASE("Sphere: gets area of sphere object", "[aufgabe5.2]") {
 
   Sphere s4 {{6.9f, 4.2f, -1.2f}, 1.25f};
   REQUIRE(Approx(19.635f) == s4.area());
+
+  auto s5 = std::make_shared<Sphere>(Sphere{{6.9f, 4.2f, -1.2f}, 1.25f});
+  std::shared_ptr<Shape> shape = s5;
+  REQUIRE(Approx(19.635f) == shape -> area());
 }
 
 TEST_CASE("Sphere: gets volume of sphere object", "[aufgabe5.2]") {
@@ -96,6 +100,10 @@ TEST_CASE("Sphere: gets volume of sphere object", "[aufgabe5.2]") {
 
   Sphere s4 {{6.9f, 4.2f, -1.2f}, 1.25f};
   REQUIRE(Approx(8.18123f) == s4.volume());
+
+  auto s5 = std::make_shared<Sphere>(Sphere{{6.9f, 4.2f, -1.2f}, 1.25f});
+  std::shared_ptr<Shape> shape = s5;
+  REQUIRE(Approx(8.18123f) == shape -> volume());
 
 }
 
@@ -185,6 +193,10 @@ TEST_CASE("Box: gets area of box object", "[aufgabe5.2]") {
 
   Box b4 {{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}};
   REQUIRE(Approx(30.18f) == b4.area());
+
+  auto b5 = std::make_shared<Box>(Box{{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}});
+  std::shared_ptr<Shape> box = b5;
+  REQUIRE(Approx(30.18f) == box -> area());
   
 }
 
@@ -200,6 +212,10 @@ TEST_CASE("Box: gets volume of box object", "[aufgabe5.2]") {
 
   Box b4 {{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}};
   REQUIRE(Approx(6.67f) == b4.volume());
+
+  auto b5 = std::make_shared<Box>(Box{{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}});
+  std::shared_ptr<Shape> box = b5;
+  REQUIRE(Approx(6.67f) == box -> volume());
 }
 
 /* ------------------ Aufgabe 5.3 ------------------ */
@@ -214,7 +230,7 @@ TEST_CASE("Box: constructor tests", "[aufgabe5.3]") {
   REQUIRE(0.0f == b1.maximum().y);
   REQUIRE(0.0f == b1.maximum().z);
 
-  REQUIRE("Shape" == b1.name());
+  REQUIRE("Box" == b1.name());
 
   REQUIRE(0.0f == b1.color().r);
   REQUIRE(0.0f == b1.color().g);
@@ -230,7 +246,7 @@ TEST_CASE("Box: constructor tests", "[aufgabe5.3]") {
   REQUIRE(2.5f == b2.maximum().y);
   REQUIRE(1.2f == b2.maximum().z);
 
-  REQUIRE("Shape" == b2.name());
+  REQUIRE("Box" == b2.name());
 
   REQUIRE(0.0f == b2.color().r);
   REQUIRE(0.0f == b2.color().g);
@@ -262,7 +278,7 @@ TEST_CASE("Sphere: constructor tests", "[aufgabe5.3]") {
 
   REQUIRE(0.0f == s1.radius());
 
-  REQUIRE("Shape" == s1.name());
+  REQUIRE("Sphere" == s1.name());
 
   REQUIRE(0.0f == s1.color().r);
   REQUIRE(0.0f == s1.color().g);
@@ -275,7 +291,7 @@ TEST_CASE("Sphere: constructor tests", "[aufgabe5.3]") {
 
   REQUIRE(4.3f == s2.radius());
 
-  REQUIRE("Shape" == s2.name());
+  REQUIRE("Sphere" == s2.name());
 
   REQUIRE(0.0f == s2.color().r);
   REQUIRE(0.0f == s2.color().g);
@@ -294,6 +310,20 @@ TEST_CASE("Sphere: constructor tests", "[aufgabe5.3]") {
   REQUIRE(0.35f == s3.color().g);
   REQUIRE(0.2f == s3.color().b);
 
+}
+
+TEST_CASE("Shape: print method", "[aufgabe5.4]") {
+  Sphere s1 {{0.4f, 2.3f, 1.2f}, 4.3f};
+  std::cout << s1 << std::endl;
+
+  Sphere s2 {"Sphere 2", {0.9f, 0.35f, 0.2f}, {6.9f, 4.2f, -1.2f}, -6.9f};
+  std::cout << s2 << std::endl;
+
+  Box b1 {};
+  std::cout << b1 << std::endl;
+
+  auto b2 = std::make_shared<Box>(Box{"Box 2", {1.0f, 0.3f, 0.5f}, {-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}});
+  b2 -> print(std::cout);
 }
 
 /* ------------------ Main ------------------ */

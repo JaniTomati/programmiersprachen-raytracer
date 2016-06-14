@@ -4,13 +4,13 @@
 
     // Default Constructor 
   Box::Box() : 
-  Shape {},
+  Shape {"Box", {0.0f, 0.0f, 0.0f}},
   min_ {0.0f, 0.0f, 0.0f}, 
   max_ {0.0f, 0.0f, 0.0f} {}
 
     // Constructor takes min and max
   Box::Box(glm::vec3 const& min, glm::vec3 const& max) :
-  Shape {}, // name and color default 
+  Shape {"Box", {0.0f, 0.0f, 0.0f}}, // name and color default 
   min_ {min}, 
   max_ {max} {}
 
