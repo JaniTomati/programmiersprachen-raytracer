@@ -10,7 +10,7 @@
 
     // Constructor takes center and radius
   Sphere::Sphere(glm::vec3 const& ctr, float rad) :
-  Shape {"Sphere", {0.0f, 0.0f, 0.0f}}, // name and color default 
+  Shape {"Sphere", {0.0f, 0.0f, 0.0f}}, 
   ctr_ {ctr},
   rad_ {rad} {}
 
@@ -34,6 +34,16 @@
     }
 
     return result;
+  }
+
+  std::ostream& Sphere::print(std::ostream& os) const {
+    Shape::print(os);
+    os << "Center: (" << ctr_.x << ", " 
+    << ctr_.y << ", " 
+    << ctr_.z << ")" << "\n" 
+    << "Radius: " << rad_ 
+    << std::endl;
+    return os;
   }
 
     // get center

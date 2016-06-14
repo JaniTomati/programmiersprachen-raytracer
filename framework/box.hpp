@@ -12,6 +12,7 @@ public:
 
 	float area() const override;
 	float volume() const override;
+  std::ostream& print(std::ostream& os) const override; 
   glm::vec3 const& maximum() const;
   glm::vec3 const& minimum() const;
   void maximum(glm::vec3 const& max);
