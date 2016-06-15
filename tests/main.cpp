@@ -312,7 +312,7 @@ TEST_CASE("Sphere: constructor tests", "[aufgabe5.3]") {
 
 }
 
-/* ------------------ Aufgabe 5.4 ------------------ */
+/* ------------------ Aufgabe 5.5 ------------------ */
 
 TEST_CASE("Shape: print method", "[aufgabe5.5]") {
   Sphere s1 {{0.4f, 2.3f, 1.2f}, 4.3f};
@@ -326,12 +326,48 @@ TEST_CASE("Shape: print method", "[aufgabe5.5]") {
 
   auto b2 = std::make_shared<Box>(Box{"Schachtel", {1.0f, 0.3f, 0.5f}, {-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}});
   b2 -> print(std::cout);
+  std::cout << std::endl;
 }
 
-/* ------------------ Aufgabe 5.5 ------------------ */
+/* ------------------ Aufgabe 5.6 ------------------ */
 
-TEST_CASE("intersectRaySphere", "[aufgabe5.5]") {
+TEST_CASE("intersectRaySphere", "[aufgabe5.6]") {
+  // Ray
+  glm::vec3 ray_origin{0.0f, 0.0f, 0.0f};
+  // ray direction has to be normalized !
+  // you can use : 
+  // v = glm::normalize(some_vector)
+  glm::vec3 ray_direction{0.0f, 0.0f, 1.0f};
 
+  // Sphere
+  glm::vec3 sphere_center{0.0f, 0.0f, 5.0f};
+  float sphere_radius{1.0f};
+
+  float distance{0.0f};
+  auto result = glm::intersectRaySphere(
+    ray_origin, ray_direction,
+    sphere_center,
+    sphere_radius * sphere_radius, // squared radius !!!
+    distance);
+
+  REQUIRE(distance == Approx(4.0f));
+
+}
+
+/* ------------------ Aufgabe 5.8 ------------------ */
+
+TEST_CASE("Destructor: virtual vs. non-virtual", "[aufgabe5.8]") {
+  Color red(255, 0, 0); 
+  glm::vec3 position(0, 0, 0);
+
+  Sphere* s1 = new Sphere("sphere0", red, position, 1.2); 
+  Shape* s2 = new Sphere("sphere1", red, position, 1.2);
+
+  s1->print(std::cout); 
+  std::cout << std::endl;
+  s2->print(std::cout);
+  delete s1; 
+  delete s2;
 }
 
 /* ------------------ Main ------------------ */

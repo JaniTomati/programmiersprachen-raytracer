@@ -20,6 +20,10 @@
   ctr_ {ctr}, 
   rad_ {rad} {}
 
+  Sphere::~Sphere() {
+    std::cout << "Sphere Destructor: " << name_ << std::endl;
+  }
+
     // get area A = 4 * pi * r^2
   float Sphere::area() const {
     return 4.0f * M_PI * rad_ * rad_;
@@ -36,6 +40,7 @@
     return result;
   }
 
+    // prints Sphere object
   std::ostream& Sphere::print(std::ostream& os) const {
     Shape::print(os);
     os << "Center: (" << ctr_.x << ", " 
@@ -64,4 +69,8 @@
     // set radius 
   void Sphere::radius(float const& rad) {
     rad_ = rad;
+  }
+
+  bool Sphere::intersect(Ray const& ray, float& distance) {
+    return glm::intersectRaySphere(ray.origin_, ray.direction_, ctr_, rad_ * rad_, distance);
   }

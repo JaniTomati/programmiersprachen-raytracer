@@ -4,13 +4,18 @@
 
   // default Constructor 
 Shape::Shape() :
-	name_ {"Shape"}, 
-	color_ {0.0f, 0.0f, 0.0f} {}
+name_ {"Shape"}, 
+color_ {0.0f, 0.0f, 0.0f} {}
 
   // Constructor takes name and color 
 Shape::Shape(std::string const& name, Color const& color) : 
-	name_ {name},
-	color_ {color} {}
+name_ {name},
+color_ {color} {}
+
+  // Destructor 
+Shape::~Shape() {
+  std::cout << "Shape Destructor: " << name_ << std::endl;
+}
 
   // get name 
 std::string Shape::name() const {
