@@ -31,13 +31,7 @@
 
     // get volume V = 4/3 * pi * r^3
   float Sphere::volume() const {
-    float result = (4.0f / 3.0f) * M_PI * rad_ * rad_ * rad_;
-
-    if (result < 0) {
-      result = result * (-1); // only positive solutions
-    }
-
-    return result;
+    return std::abs((4.0f / 3.0f) * M_PI * rad_ * rad_ * rad_);
   }
 
     // prints Sphere object

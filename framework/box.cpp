@@ -23,25 +23,13 @@
     // gets area of box object
   float Box::area() const {
     glm::vec3 difference = max_ - min_;
-    float result = 2 * (difference.x * difference.y + difference.x * difference.z + difference.y * difference.z);
-
-    if (result < 0) {
-      result = result * (-1); // only positive solutions
-    }
-
-    return result;
+    return 2 * (std::abs(difference.x * difference.y) + std::abs(difference.x * difference.z) + std::abs(difference.y * difference.z));
   }
   
     // gets volume of box object
   float Box::volume() const {
     glm::vec3 difference = max_ - min_;
-    float result = difference.x * difference.y * difference.z;
-
-    if (result < 0) {
-      result = result * (-1);
-    }
-
-    return result;
+    return std::abs(difference.x * difference.y * difference.z);
   }
 
     // prints Box object

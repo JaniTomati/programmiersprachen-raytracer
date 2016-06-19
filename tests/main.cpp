@@ -186,17 +186,17 @@ TEST_CASE("Box: gets area of box object", "[aufgabe5.2]") {
   REQUIRE(0.0f == b1.area());
 
   Box b2 {{1.0f, 2.3f, 4.1f}, {0.0f, 2.5f, 1.2f}};
-  REQUIRE(Approx(4.24f) == b2.area());
+  REQUIRE(Approx(7.36f) == b2.area());
 
   Box b3 {{-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}};
-  REQUIRE(Approx(58.48f) == b3.area());
+  REQUIRE(Approx(308.08f) == b3.area());
 
   Box b4 {{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}};
-  REQUIRE(Approx(30.18f) == b4.area());
+  REQUIRE(Approx(34.78f) == b4.area());
 
   auto b5 = std::make_shared<Box>(Box{{-2.8f, 1.1f, -1.9f}, {-3.3f, 6.9f, -4.2f}});
   std::shared_ptr<Shape> box = b5;
-  REQUIRE(Approx(30.18f) == box -> area());
+  REQUIRE(Approx(34.78f) == box -> area());
   
 }
 
@@ -354,20 +354,68 @@ TEST_CASE("intersectRaySphere", "[aufgabe5.6]") {
 
 }
 
+/* ------------------ Aufgabe 5.7 ------------------ */
+
+TEST_CASE("static and dynamic variables", "[aufgabe5.7]") {
+  /* Allgemein: 
+  STATISCH: zur Uebersetzungszeit festgelegt oder gebunden, kann zur Lauftzeit nicht
+  veraendert werden (Bsp: Java, C++). 
+  - Variablen werden mit Typ versehen, typabhängige Fehlererkennung, schnellere Ausfuehrung als dynamisch typisierte Sprachen
+  DYNAMISCH: nicht festgelegt bis zur Laufzeit des Programms. Erlaubt veraenderungen
+  waehrend des Programmablaufs (Bsp: Scheme, Javascript).
+  - Variablen sind nur Namen, Typen sind mit Weten verbunden, keine Deklarationen, deshalb groessere Flexibilitaet*/
+
+  Color red(255, 0, 0); 
+  glm::vec3 position(0, 0, 0);
+
+  // Adresse eines Sphere-Objektes wird an eine Zeigervariable vom Typ Sphere zugewiesen
+  std::shared_ptr<Sphere> s1 = // statische Klasse
+    std::make_shared<Sphere>("sphere0", red, position, 1.2); // dynamische Klasse 
+    // statische und dynamische Klasse sind identisch
+
+  // Adresse eines Sphere-Objektes wird an eine Zeigervariable vom Typ der Basisklasse Shape zugewiesen
+  std::shared_ptr<Shape> s2 = // statische Klasse
+    std::make_shared<Sphere>("sphere1", red, position, 1.2); // dynamische Klasse
+    // statische und dynamische Klasse unterscheiden sich
+
+  /* Im Kontext der Vererbung erlauben statisch typisierte OO-Sprachen, dass die dynamische Klasse
+   eine von der statischen Klasse abgeleitete Klasse sein kann. 
+   Die dynamische Klasse bestimmt bei virtuellen Funktionen, welche Methode ausgefuehrt wird. */
+
+  std::cout << std::endl;
+  s1 -> print(std::cout); 
+  std::cout << std::endl;
+  s2 -> print(std::cout);
+  std::cout << std::endl;
+}
+
 /* ------------------ Aufgabe 5.8 ------------------ */
 
 TEST_CASE("Destructor: virtual vs. non-virtual", "[aufgabe5.8]") {
   Color red(255, 0, 0); 
   glm::vec3 position(0, 0, 0);
 
-  Sphere* s1 = new Sphere("sphere0", red, position, 1.2); 
-  Shape* s2 = new Sphere("sphere1", red, position, 1.2);
+  Sphere* s0 = new Sphere("sphere0", red, position, 1.2); 
+  Shape* s1 = new Sphere("sphere1", red, position, 1.2); // s ist polymorph
 
-  s1->print(std::cout); 
   std::cout << std::endl;
-  s2->print(std::cout);
-  delete s1; 
-  delete s2;
+  s0 -> print(std::cout); 
+  std::cout << std::endl;
+  s1 -> print(std::cout);
+  std::cout << std::endl;
+
+  delete s0; 
+  delete s1;
+
+  /* virtual: ruft erst den Unterklassen-Destruktor (Sphere), dann den Basisklasse (Shape) für beide Beispiele
+     non-virtual: Sphere0: ruft zuerst den Destruktor der Klasse Sphere, dann den der Klasse (Shape)
+     Sphere1: Ruft nur den Destruktor der Klasse Shape 
+     => kommt zu Resource Leak, bei dem die erworbenen Ressourcen nicht mehr vom Programm freigegeben werden
+
+     Ist der Destruktor nicht als virtual deklariert kommt es zu "undefinied behaviour", was zu bugs fuehren kann. 
+     Virtual Destructors sind immer dann nuetzlich, wenn eine Klasse polymorph verwendet wird (bzw. mindestens eine 
+     virtuelle Funktion vorhanden ist)
+     http://stackoverflow.com/questions/461203/when-to-use-virtual-destructors */
 }
 
 /* ------------------ Main ------------------ */
