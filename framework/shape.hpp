@@ -3,6 +3,7 @@
 #ifndef BUW_SHAPE_HPP
 #define BUW_SHAPE_HPP
 #include "color.hpp"
+#include "ray.hpp"
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <glm/gtx/intersect.hpp>
@@ -15,7 +16,7 @@ public:
   Shape();
   Shape(std::string const& name, Color const& color);
   virtual ~Shape(); // Aufgabe 5.8
-  virtual float area() const = 0;
+  virtual float area() const = 0; // not implemented on this level --> children classes are able to override the function
   virtual float volume() const = 0;
   virtual std::ostream& print(std::ostream& os) const; 
   std::string name() const;

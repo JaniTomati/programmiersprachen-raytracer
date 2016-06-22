@@ -37,7 +37,7 @@
     // prints Sphere object
   std::ostream& Sphere::print(std::ostream& os) const {
     Shape::print(os);
-    os << "Center: (" << ctr_.x << ", " 
+    os << "Center: (" << ctr_.x << ", "  //glm::to_string(glm::vec3)
     << ctr_.y << ", " 
     << ctr_.z << ")" << "\n" 
     << "Radius: " << rad_ 
@@ -61,10 +61,11 @@
   }
 
     // set radius 
-  void Sphere::radius(float const& rad) {
+  void Sphere::radius(float rad) {
     rad_ = rad;
   }
 
   bool Sphere::intersect(Ray const& ray, float& distance) {
+    // ray.direction_ = glm::normalize(ray.direction_);
     return glm::intersectRaySphere(ray.origin_, ray.direction_, ctr_, rad_ * rad_, distance);
   }
