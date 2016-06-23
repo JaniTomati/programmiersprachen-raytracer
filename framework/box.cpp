@@ -4,21 +4,26 @@
 
     // Default Constructor 
   Box::Box() : 
-  Shape {"Box", {0.0f, 0.0f, 0.0f}},
+  Shape {"Box", {}},
   min_ {0.0f, 0.0f, 0.0f}, 
   max_ {0.0f, 0.0f, 0.0f} {}
 
     // Constructor takes min and max
   Box::Box(glm::vec3 const& min, glm::vec3 const& max) :
-  Shape {"Box", {0.0f, 0.0f, 0.0f}}, 
+  Shape {"Box", {}}, 
   min_ {min}, 
   max_ {max} {}
 
     // Constructor takes name, color, min and max
-  Box::Box(std::string const& name, Color const& color, glm::vec3 const& min, glm::vec3 const& max) : 
-  Shape {name, color},
+  Box::Box(std::string const& name, Material const& mat, glm::vec3 const& min, glm::vec3 const& max) : 
+  Shape {name, mat},
   min_ {min}, 
   max_ {max} {}
+
+    // Destructor
+  Box::~Box() {
+    
+  }
 
     // gets area of box object
   float Box::area() const {

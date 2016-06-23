@@ -5,16 +5,16 @@
   // default Constructor 
 Shape::Shape() :
 name_ {"Shape"}, 
-color_ {0.0f, 0.0f, 0.0f} {}
+mat_ {} {}
 
   // Constructor takes name and color 
-Shape::Shape(std::string const& name, Color const& color) : 
+Shape::Shape(std::string const& name, Material const& mat) : 
 name_ {name},
-color_ {color} {}
+mat_ {mat} {}
 
   // Destructor 
 Shape::~Shape() {
-  std::cout << "Shape Destructor: " << name_ << std::endl;
+  
 }
 
   // get name 
@@ -23,16 +23,15 @@ std::string Shape::name() const {
 }
 
   // set name
-Color const& Shape::color() const {
-  return color_; 
+Material const& Shape::material() const {
+  return mat_; 
 }
 
   // prints shape object
 std::ostream& Shape::print(std::ostream& os) const {
   os << "Name: " << name_ << "\n" 
-  << "Color RGB: (" << color_.r << ", " 
-  << color_.g << ", " 
-  << color_.b << ")" << std::endl;
+  << "Material: " << mat_
+  << std::endl;
   return os;
 }
 

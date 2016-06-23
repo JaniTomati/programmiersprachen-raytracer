@@ -4,24 +4,25 @@
   
     // default constructor
   Sphere::Sphere() :
-  Shape {"Sphere", {0.0f, 0.0f, 0.0f}},
+  Shape {"Sphere", {}},
   ctr_ {0.0f, 0.0f, 0.0f}, 
   rad_ {0.0f} {}
 
     // Constructor takes center and radius
   Sphere::Sphere(glm::vec3 const& ctr, float rad) :
-  Shape {"Sphere", {0.0f, 0.0f, 0.0f}}, 
+  Shape {"Sphere", {}}, 
   ctr_ {ctr},
   rad_ {rad} {}
 
     // Constructor takes name, color, center and radius
-  Sphere::Sphere(std::string const& name, Color const& color, glm::vec3 const& ctr, float rad) :
-  Shape {name, color},
+  Sphere::Sphere(std::string const& name, Material const& mat, glm::vec3 const& ctr, float rad) :
+  Shape {name, mat},
   ctr_ {ctr}, 
   rad_ {rad} {}
 
+    // Destructor 
   Sphere::~Sphere() {
-    std::cout << "Sphere Destructor: " << name_ << std::endl;
+    
   }
 
     // get area A = 4 * pi * r^2
