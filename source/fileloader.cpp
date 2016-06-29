@@ -13,42 +13,44 @@ int main() {
   std::string line;
   file.open("../doc/fivepointsix.txt");
 
-  while (!file.eof()) {
-    std::getline(file, line);
+  if (file.is_open()) {
 
-    Material mat;
-    std::map<std::string, Material> materialmap;
-    std::stringstream ss;
-    std::string keyword; 
+    while(!file.eof()) {
+      std::getline(file, line);
 
-    ss << line; 
-    ss >> keyword; 
+      Material mat;
+      std::map<std::string, Material> materialmap;
+      std::stringstream ss;
+      std::string keyword; 
 
-    if (keyword == "define") {
+      ss << line; 
+      ss >> keyword; 
 
-      ss >> keyword;
+      if (keyword == "define") {
 
-      if (keyword == "material") {
+        ss >> keyword;
 
-        ss >> mat.name_;
-        ss >> mat.ka_.r;
-        ss >> mat.ka_.g;
-        ss >> mat.ka_.b;
-        ss >> mat.kd_.r;
-        ss >> mat.kd_.g;
-        ss >> mat.kd_.b;
-        ss >> mat.ks_.r;
-        ss >> mat.ks_.g;
-        ss >> mat.ks_.b;
-        ss >> mat.m_;
+        if (keyword == "material") {
 
-        materialmap[mat.name_] = mat;
+          ss >> mat.name_;
+          ss >> mat.ka_.r;
+          ss >> mat.ka_.g;
+          ss >> mat.ka_.b;
+          ss >> mat.kd_.r;
+          ss >> mat.kd_.g;
+          ss >> mat.kd_.b;
+          ss >> mat.ks_.r;
+          ss >> mat.ks_.g;
+          ss >> mat.ks_.b;
+          ss >> mat.m_;
 
-        std::cout << mat << std::endl;
+          materialmap[mat.name_] = mat;
+
+          std::cout << mat << std::endl;
+        }
       }
     }
-
   }
-
-	return 0;
+  
+  return 0;
 }

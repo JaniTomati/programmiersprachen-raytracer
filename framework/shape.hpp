@@ -18,6 +18,7 @@ public:
   virtual ~Shape(); // Aufgabe 5.8
   virtual float area() const = 0; // not implemented on this level --> children classes are able to override the function
   virtual float volume() const = 0;
+  virtual bool intersect(Ray const& ray, float& t) const = 0;
   virtual std::ostream& print(std::ostream& os) const; 
   std::string name() const;
   Material const& material() const;

@@ -17,6 +17,16 @@ struct Ray {
   origin_ {origin},
   direction_ {glm::normalize(direction)} {}
 
+    // gets origin
+  glm::vec3 origin() const {
+    return origin_;
+  }
+
+    // gets direction
+  glm::vec3 direction() const {
+    return direction_;
+  }
+
     // member
   glm::vec3 origin_;
   glm::vec3 direction_;

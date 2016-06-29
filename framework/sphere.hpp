@@ -15,12 +15,11 @@ public:
   float area() const override;
   float volume() const override;
   std::ostream& print(std::ostream& os) const override;
+  bool intersect(Ray const& ray, float& distance) const override;
   glm::vec3 const& center() const;
   float radius() const;
   void center(glm::vec3 const& ctr);
   void radius(float rad);
-
-  bool intersect(Ray const& ray, float& distance);
 
 private:
 	glm::vec3 ctr_;
