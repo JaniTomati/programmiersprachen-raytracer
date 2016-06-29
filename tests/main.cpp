@@ -114,14 +114,14 @@ TEST_CASE("Box: gets member min_ (minimum)", "[aufgabe5.2]") {
   REQUIRE(0.0f == b1.minimum().z);
 
   Box b2 {{1.0f, 2.3f, 4.1f}, {0.0f, 2.5f, 1.2f}};
-  REQUIRE(1.0f == b2.minimum().x);
+  REQUIRE(0.0f == b2.minimum().x);
   REQUIRE(2.3f == b2.minimum().y);
-  REQUIRE(4.1f == b2.minimum().z);
+  REQUIRE(1.2f == b2.minimum().z);
 
   Box b3 {{-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}};
-  REQUIRE(-1.0f == b3.minimum().x);
+  REQUIRE(-9.0f == b3.minimum().x);
   REQUIRE(-4.3f == b3.minimum().y);
-  REQUIRE(5.6f == b3.minimum().z);
+  REQUIRE(-2.2f == b3.minimum().z);
 }
 
 TEST_CASE("Box: gets member max_ (maximum)", "[aufgabe5.2]") {
@@ -131,14 +131,14 @@ TEST_CASE("Box: gets member max_ (maximum)", "[aufgabe5.2]") {
   REQUIRE(0.0f == b1.maximum().z);
 
   Box b2 {{1.0f, 2.3f, 4.1f}, {0.0f, 2.5f, 1.2f}};
-  REQUIRE(0.0f == b2.maximum().x);
+  REQUIRE(1.0f == b2.maximum().x);
   REQUIRE(2.5f == b2.maximum().y);
-  REQUIRE(1.2f == b2.maximum().z);
+  REQUIRE(4.1f == b2.maximum().z);
 
   Box b3 {{-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}};
-  REQUIRE(-9.0f == b3.maximum().x);
+  REQUIRE(-1.0f == b3.maximum().x);
   REQUIRE(1.5f == b3.maximum().y);
-  REQUIRE(-2.2f == b3.maximum().z);
+  REQUIRE(5.6f == b3.maximum().z);
 }
 
 TEST_CASE("Box: sets member min_ (minimum)", "[aufgabe5.2]"){
@@ -246,13 +246,13 @@ TEST_CASE("Box: constructor tests", "[aufgabe5.3]") {
 
 
   Box b2 {{1.0f, 2.3f, 4.1f}, {0.0f, 2.5f, 1.2f}};
-  REQUIRE(1.0f == b2.minimum().x);
+  REQUIRE(0.0f == b2.minimum().x);
   REQUIRE(2.3f == b2.minimum().y);
-  REQUIRE(4.1f == b2.minimum().z);
+  REQUIRE(1.2f == b2.minimum().z);
 
-  REQUIRE(0.0f == b2.maximum().x);
+  REQUIRE(1.0f == b2.maximum().x);
   REQUIRE(2.5f == b2.maximum().y);
-  REQUIRE(1.2f == b2.maximum().z);
+  REQUIRE(4.1f == b2.maximum().z);
 
   REQUIRE("Box" == b2.name());
 
@@ -270,13 +270,13 @@ TEST_CASE("Box: constructor tests", "[aufgabe5.3]") {
 
 
   Box b3 {"Box 3", {"Eisen", {1.0f, 2.2f, 4.2f}, {3.3f, 4.4f, 5.5f}, {3.1f, 5.0f, 0.1f}, 3.2f}, {-1.0f, -4.3f, 5.6f}, {-9.0f, 1.5f, -2.2f}};
-  REQUIRE(-1.0f == b3.minimum().x);
+  REQUIRE(-9.0f == b3.minimum().x);
   REQUIRE(-4.3f == b3.minimum().y);
-  REQUIRE(5.6f == b3.minimum().z);
+  REQUIRE(-2.2f == b3.minimum().z);
 
-  REQUIRE(-9.0f == b3.maximum().x);
+  REQUIRE(-1.0f == b3.maximum().x);
   REQUIRE(1.5f == b3.maximum().y);
-  REQUIRE(-2.2f == b3.maximum().z);
+  REQUIRE(5.6f == b3.maximum().z);
 
   REQUIRE("Box 3" == b3.name());
 
@@ -467,6 +467,68 @@ TEST_CASE("Destructor: virtual vs. non-virtual", "[aufgabe5.8]") {
      Virtual Destructors sind immer dann nuetzlich, wenn eine Klasse polymorph verwendet wird (bzw. mindestens eine 
      virtuelle Funktion vorhanden ist)
      http://stackoverflow.com/questions/461203/when-to-use-virtual-destructors */
+} 
+
+/* ------------------ Aufgabe 6.3 ------------------ */
+
+TEST_CASE("Box: intersect checks whether or not a ray hits a box", "[aufgabe6.3]") {
+
+  Ray r1 {};
+  Ray r2 {{1.0f, 1.0f, 1.0f}, {1.0f, 2.0f, 3.0f}};
+  Ray r3 {{2.3f, 4.2f, 6.9f}, {6.9f, 4.2f, 2.3f}};
+  Ray r4 {{0.0f, 0.0f, 0.0f}, {3.0f, 3.0f, 3.0f}};
+
+  Box boss {"He da Boss", {"Lebkuchen", {1.0f, 2.2f, 4.2f}, {3.3f, 4.4f, 5.5f}, {3.1f, 5.0f, 0.1f}, 3.2f}, {0.0f, 0.0f, 0.0f}, {3.0f, 3.0f, 3.0f}};
+  float distance = 0.0f;
+  
+  REQUIRE(boss.intersect(r1, distance) == false);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(boss.intersect(r2, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(boss.intersect(r3, distance) == false);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(boss.intersect(r4, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  Ray r5 {{-1.0f, -1.0f, -1.0f}, {1.0f, 2.0f, 3.0f}};
+  Ray r6 {{-6.0f, -7.0f, -8.0f}, {-6.9f, -4.2f, -2.3f}};
+  Ray r7 {{-7.0f, -5.0f, -7.0f}, {10.0f, 11.0f, 12.0f}};
+
+  Box billy {"Strangest Boy in Town", {"Nutellaglas", {1.0f, 2.2f, 4.2f}, {3.3f, 4.4f, 5.5f}, {3.1f, 5.0f, 0.1f}, 3.2f}, {-3.0f, -5.5f, -1.2f}, {5.2f, 4.6f, 6.9f}};
+
+  REQUIRE(billy.intersect(r1, distance) == false);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(billy.intersect(r5, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(billy.intersect(r6, distance) == false);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(billy.intersect(r7, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  Ray r8 {{-9.2f, -11.0f, -12.2f}, {9.0f, 4.0f, 6.0f}};
+  Ray r9 {{-7.3f, -6.8f, -8.4f}, {-6.8f, -4.4f, -2.7f}};
+  Ray r10 {{-10.0f, -15.0f, -16.2f}, {10.6f, 12.5f, 9.3f}};
+
+  Box butch {"Don't mess with Her", {"Titan", {1.0f, 2.2f, 4.2f}, {3.3f, 4.4f, 5.5f}, {3.1f, 5.0f, 0.1f}, 3.2f}, {-9.0f, -10.5f, -11.2f}, {-1.2f, -2.6f, -1.9f}};
+
+  REQUIRE(butch.intersect(r1, distance) == false);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(butch.intersect(r8, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(butch.intersect(r9, distance) == true);
+  REQUIRE(distance == 0.0f);
+
+  REQUIRE(butch.intersect(r10, distance) == true);
+  REQUIRE(distance == 0.0f);
+
 } 
 
 /* ------------------ Main ------------------ */
