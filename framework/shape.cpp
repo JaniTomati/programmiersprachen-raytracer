@@ -30,7 +30,7 @@ Material const& Shape::material() const {
   // prints shape object
 std::ostream& Shape::print(std::ostream& os) const {
   os << "Name: " << name_ << "\n" 
-  << "Material: " << mat_
+  << "Material: " << "\n" << mat_
   << std::endl;
   return os;
 }

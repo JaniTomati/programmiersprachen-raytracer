@@ -22,7 +22,7 @@ std::ostream& Material::print(std::ostream& os) const {
 	<< "Ambient Refflection: " << ka_
 	<< "Diffuse Refflection: " << kd_
 	<< "Specular Refflection: " << ks_
-	<< "Exponent: " << m_;
+	<< "Exponent: " << m_ << std::endl;
 	return os;
 }
 
