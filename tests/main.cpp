@@ -5,6 +5,7 @@
 #include "shape.hpp"
 #include "sphere.hpp"
 #include "box.hpp"
+#include "camera.hpp"
 
 /* ------------------ Aufgabe 5.2 ------------------ */
 
@@ -534,6 +535,18 @@ TEST_CASE("Box: intersect checks whether or not a ray hits a box", "[aufgabe6.3]
   REQUIRE(distance == Approx(10.13125f));
 
 } 
+
+/* ------------------ Aufgabe 7.1 ------------------ */
+
+TEST_CASE("Camera: prints camera (every member)", "[aufgabe7.1]") {
+
+  Camera camera {};
+  camera.print(std::cout);
+
+  Camera pamela {"Pamela", 90.0};
+  pamela.print(std::cout);
+
+}
 
 /* ------------------ Main ------------------ */
 
