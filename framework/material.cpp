@@ -19,9 +19,9 @@ m_ {m} {}
   // print method
 std::ostream& Material::print(std::ostream& os) const {
 	os << "Name: " << name_ << "\n"
-	<< "Ambient Refflection: " << ka_
-	<< "Diffuse Refflection: " << kd_
-	<< "Specular Refflection: " << ks_
+	<< "Ambient Reflection: " << ka_
+	<< "Diffuse Reflection: " << kd_
+	<< "Specular Reflection: " << ks_
 	<< "Exponent: " << m_ << std::endl;
 	return os;
 }

@@ -485,7 +485,8 @@ TEST_CASE("Box: intersect checks whether or not a ray hits a box", "[aufgabe6.3]
   REQUIRE(distance == 0.0f);
 
   REQUIRE(boss.intersect(r2, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == Approx(1.24722f));
+  distance = 0.0f;
 
   REQUIRE(boss.intersect(r3, distance) == false);
   REQUIRE(distance == 0.0f);
@@ -503,13 +504,15 @@ TEST_CASE("Box: intersect checks whether or not a ray hits a box", "[aufgabe6.3]
   REQUIRE(distance == 0.0f);
 
   REQUIRE(billy.intersect(r5, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == Approx(0.24944f));
+  distance = 0.0f;
 
   REQUIRE(billy.intersect(r6, distance) == false);
   REQUIRE(distance == 0.0f);
 
   REQUIRE(billy.intersect(r7, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == 9.23407f);
+  distance = 0.0f;
 
   Ray r8 {{-9.2f, -11.0f, -12.2f}, {9.0f, 4.0f, 6.0f}};
   Ray r9 {{-7.3f, -6.8f, -8.4f}, {-6.8f, -4.4f, -2.7f}};
@@ -521,13 +524,14 @@ TEST_CASE("Box: intersect checks whether or not a ray hits a box", "[aufgabe6.3]
   REQUIRE(distance == 0.0f);
 
   REQUIRE(butch.intersect(r8, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == Approx(1.92209f));
+  distance = 0.0f;
 
   REQUIRE(butch.intersect(r9, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == Approx(2.13439f));
 
   REQUIRE(butch.intersect(r10, distance) == true);
-  REQUIRE(distance == 0.0f);
+  REQUIRE(distance == Approx(10.13125f));
 
 } 
 

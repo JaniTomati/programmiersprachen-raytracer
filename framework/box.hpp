@@ -28,5 +28,7 @@ private:
 };
 
 bool in_box(glm::vec3 const& min, glm::vec3 const& max, glm::vec3 const& point);
+bool is_in_box(glm::vec3 const& min, glm::vec3 const& max, glm::vec3 const& point);
+float distance_two_vecs(glm::vec3 const& p1, glm::vec3 const& p2);
 
 #endif // BUW_BOX_HPP
