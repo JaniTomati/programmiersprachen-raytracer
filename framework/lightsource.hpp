@@ -6,21 +6,25 @@
 #include <glm/vec3.hpp>
 #include "color.hpp"
 
-class LightSource {
+struct LightSource {
 
-public:
     // constructors 
-  Light();
-  Light(std::string const& name, glm::vec3 const& pos, Color const& clr);
+  LightSource();
+  LightSource(std::string const& name, glm::vec3 const& pos, Color const& point, Color const& ambient);
     // destructor 
-  ~Light();
+  ~LightSource();
 
-private:
-  // member
+  	// print 
+  std::ostream& print(std::ostream& os) const; 
+
+  	// member
   std::string name_;
-  glm::vec3 pos_; // Point Lightsource 
-  Color clr_; 
+  glm::vec3 pos_; // Position of the Point Lightsource 
+  Color ip_; // Point Light Intensity 
+  Color ia_; // Ambient Light Intensity
 
 };
+
+std::ostream& operator << (std::ostream& os, LightSource const& light);
 
 #endif // BUW_LIGHTSOURCE_HPP
