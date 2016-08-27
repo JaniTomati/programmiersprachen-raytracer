@@ -6,6 +6,7 @@
 #include "sphere.hpp"
 #include "box.hpp"
 #include "camera.hpp"
+#include "lightsource.hpp"
 
 /* ------------------ Aufgabe 5.2 ------------------ */
 
@@ -545,6 +546,16 @@ TEST_CASE("Camera: prints camera (every member)", "[aufgabe7.1]") {
 
   Camera pamela {"Pamela", 90.0};
   pamela.print(std::cout);
+
+}
+
+TEST_CASE("LightSource: prints light (every member)", "[aufgabe7.1]") {
+
+  LightSource light {};
+  light.print(std::cout);
+
+  LightSource lucifer {"Lucifer", {0.5f, 0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.4f, 0.1f, 0.1f}};
+  lucifer.print(std::cout);
 
 }
 
