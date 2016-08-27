@@ -7,9 +7,7 @@
 #include <glm/vec3.hpp>
 #include <iostream>
 
-class Camera {
-
-public:
+struct Camera {
 
    // Constructors 
   Camera();
@@ -20,8 +18,7 @@ public:
    // print camera
   std::ostream& print(std::ostream& os) const;
 
-private:
-  //member 
+   //member 
   std::string name_;
   double aovX_; // horizontal angle of view (x-axis)
   // double focalLength_; (distance to canvas) 
