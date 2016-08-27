@@ -58,7 +58,20 @@ Scene loadSDF(std::string const& file_in) {
 
           // Loads Light # light - from right above 
         else if(keyword == "light") {
-          // ... do
+          LightSource light; // note: more than one light source would need a vector or some sort of other container 
+
+          ss >> light.name_;
+          ss >> light.pos_.x;
+          ss >> light.pos_.y;
+          ss >> light.pos_.z;
+          ss >> light.ip_.r;
+          ss >> light.ip_.g;
+          ss >> light.ip_.b;
+          ss >> light.ia_.r;
+          ss >> light.ia_.g;
+          ss >> light.ia_.b;
+
+          std::cout << "Added Light: " << light << std::endl;
         }
 
           // Loads Camera # camera
@@ -66,7 +79,7 @@ Scene loadSDF(std::string const& file_in) {
           Camera cam;
 
           ss >> cam.name_;
-          ss >> came.aovX_;
+          ss >> cam.aovX_;
 
           std::cout << "Added Camera: " << cam << std::endl;
         }
