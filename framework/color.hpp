@@ -14,6 +14,13 @@
 
 struct Color
 {
+
+    // NEW: Default Constructor
+  Color() : 
+    r {0.5f},
+    g {0.5f},
+    b {0.5f} {}
+
   Color(float red, float green, float blue) : r(red), g(green), b(blue) {}
   float r;
   float g;
