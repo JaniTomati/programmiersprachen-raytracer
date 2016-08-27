@@ -23,7 +23,7 @@ Camera::~Camera() {}
 std::ostream& Camera::print(std::ostream& os) const {
   os << "Name: " << name_ << "\n"
   << "Angle of View: " << aovX_ << "° \n"
-  << "Origin: " << "(" <<origin_.x << ", "
+  << "Origin: " << "(" << origin_.x << ", "
   << origin_.y << ", "<< origin_.z << ") \n"
   << "Direction: " << "(" << direction_.x
   << ", " << direction_.y << ", " << direction_.z << ") \n"
