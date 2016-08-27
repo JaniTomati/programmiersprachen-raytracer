@@ -85,8 +85,9 @@
     min_ = min;
   }
 
- bool Box::intersect(Ray const& ray, float& t) const{
-  bool result = false;
+ OptiHit Box::intersect(Ray const& ray) const{
+
+  OptiHit hit{this};
   int z_1{0};
   int z_2{0};
   int z_3{0};
@@ -214,54 +215,81 @@
 
   //drei Schnittpunkte
   if (z_1 == 1 && z_2 == 1 && z_3 == 1){
-    //std::cout << "Davor1: " << t << std::endl;
-    t = std::min(std::min(s_1,s_2),s_3);
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = std::min(std::min(s_1,s_2),s_3);
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
+
   //zwei Schnittpunkte
   if (z_1 == 1 && z_2 == 1 && z_3 == 0){
-    //std::cout << "Davor2: " << t << std::endl;
-    t = std::min(s_1,s_2);
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = std::min(s_1,s_2);
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
   if (z_1 == 1 && z_3 == 1 && z_2 == 0){
-    //std::cout << "Davor3: " << t << std::endl;
-    t = std::min(s_1,s_3);
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = std::min(s_1,s_3);
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
   if (z_2 == 1 && z_3 == 1 && z_1 == 0){
-    //std::cout << "Davor4: " << t << std::endl;
-    t = std::min(s_2,s_3);
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = std::min(s_2,s_3);
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
+  
   //ein Schnittpunkt
   if (z_1 == 0 && z_2 == 0 && z_3 == 1){
-    //std::cout << "Davor5: " << t << std::endl;
-    t = s_3;
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = s_3;
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
   if (z_1 == 0 && z_3 == 0 && z_2 == 1){
-    //std::cout << "Davor6: " << t << std::endl;
-    t = s_2;
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = s_2;
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
   if (z_2 == 0 && z_3 == 0 && z_1 == 1){
-    //std::cout << "Davor7: " << t << std::endl;
-    t = s_1;
-    //std::cout << "Danach: " << t << std::endl;
-    result = true;
+    hit.distance_ = s_1;
+    hit.hit_ = true;
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
   }
+
   //kein Schnittpunkt
   if (z_1 == 0 && z_2 == 0 && z_3 == 0){
-    result = false;
+    hit.hit_ = false;
   }
-  return result;
+
+  return hit;
+}
+
+//Zusatz zu intersect
+glm::vec3 Box::calc_normalen_vec(OptiHit const& hit) const {
+  auto surface_pt = hit.surface_pt_; 
+  if(surface_pt.x == Approx(min_.x)){
+    return glm::vec3{-1.0,0.0,0.0};
+  }
+  if(surface_pt.y == Approx(min_.y)){
+    return glm::vec3{0.0,-1.0,0.0};
+  }
+  if(surface_pt.z == Approx(min_.z)){
+    return glm::vec3{0.0,0.0,-1.0};
+  }
+  if(surface_pt.x == Approx(max_.x)){
+    return glm::vec3{1.0,0.0,0.0};
+  }
+  if(surface_pt.y == Approx(max_.y)){
+    return glm::vec3{0.0,1.0,0.0};
+  }
+  if(surface_pt.z == Approx(max_.z)){
+    return glm::vec3{0.0,0.0,1.0};
+  }
 }
 
 // member function: checks whether a given point is in a box or not

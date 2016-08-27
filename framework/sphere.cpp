@@ -66,7 +66,26 @@
     rad_ = rad;
   }
 
-  bool Sphere::intersect(Ray const& ray, float& distance) const {
-    // ray.direction_ = glm::normalize(ray.direction_);
-    return glm::intersectRaySphere(ray.origin_, ray.direction_, ctr_, rad_ * rad_, distance);
+  // bool Sphere::intersect(Ray const& ray, float& distance) const {
+  //   // ray.direction_ = glm::normalize(ray.direction_);
+  //   return glm::intersectRaySphere(ray.origin_, ray.direction_, ctr_, rad_ * rad_, distance);
+  // }
+
+  OptiHit Sphere::intersect(Ray const& ray) const {
+    float t = 0.0f;
+    bool res = glm::intersectRaySphere(ray.origin_, ray.direction_,
+      ctr_, rad_*rad_, t);
+    if (res == true){
+      glm::vec3 surface_pt = ray.origin_ + t * ray.direction_;
+      glm::vec3 normalen_vec = glm::normalize(surface_pt - ctr_);
+      return OptiHit{true, t, this, normalen_vec, surface_pt};
+    }
+    return OptiHit{};
   }
+
+
+  glm::vec3 Sphere::calc_normalen_vec(OptiHit const& hit) const {
+    glm::vec3 p = hit.surface_pt_;
+    return glm::normalize(p - ctr_);
+  }
+

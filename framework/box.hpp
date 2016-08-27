@@ -4,6 +4,8 @@
 #define BUW_BOX_HPP
 #include "shape.hpp"
 #include <algorithm>
+#include <cmath>
+#include <catch.hpp>
 
 class Box : public Shape {
 public: 
@@ -15,12 +17,14 @@ public:
   float area() const override;
   float volume() const override;
   std::ostream& print(std::ostream& os) const override; 
-  bool intersect(Ray const& ray, float& t) const override;
   glm::vec3 const& maximum() const;
   glm::vec3 const& minimum() const;
   void maximum(glm::vec3 const& max);
   void minimum(glm::vec3 const& min);
   bool in_box(glm::vec3 const& point) const;
+  //intersect
+  OptiHit intersect(Ray const& ray) const override;
+  glm::vec3 calc_normalen_vec(OptiHit const& hit) const override;
 
 private:
   glm::vec3 min_;
