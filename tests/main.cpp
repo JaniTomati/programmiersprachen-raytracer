@@ -551,6 +551,73 @@ TEST_CASE("Destructor: virtual vs. non-virtual", "[aufgabe5.8]") {
 
 // } 
 
+TEST_CASE("Box intersect","[aufgabe 6.3]"){
+  Material mat1{"Plüsch", {0.22f,0.33f,0.44f},
+  {0.55f,0.66f,0.77f}, {0.88f,0.99f,0.11f},
+  3.45f};
+  // Ray
+  Ray ronald{{0.5f,0.0f,1.0f}, {0.0f,1.0f,0.0f}};
+  Ray donald{{0.5f,4.0f,2.5f}, {0.0f,-1.0f,0.0f}};
+  Ray tonald{{0.0f,0.5f,0.0f}, {0.0f,1.0f,0.0f}};
+  Ray zonald{{0.5f,0.0f,0.0f}, {0.0f,1.0f,3.0f}};
+  Ray nonald{{0.5f,0.0f,0.0f}, {0.0f,1.0f,4.0f}};
+  // Box
+  Box b{"Bixi-Box",mat1,{0.0f,1.0f,0.0f},{1.0f,2.0f,3.0f}};
+  //OptiHit
+  OptiHit hit{};
+
+  hit = b.intersect(ronald);
+  REQUIRE(hit.hit_ == true);
+  REQUIRE(hit.distance_ == 1.0f);
+  REQUIRE(hit.normalen_vec_.x == 0.0f);
+  REQUIRE(hit.normalen_vec_.y == -1.0f);
+  REQUIRE(hit.normalen_vec_.z == 0.0f);
+  REQUIRE(hit.surface_pt_.x == 0.5f);
+  REQUIRE(hit.surface_pt_.y == 1.0f);
+  REQUIRE(hit.surface_pt_.z == 1.0f);
+  
+  hit = b.intersect(donald);
+  REQUIRE(hit.hit_ == true);
+  REQUIRE(hit.distance_ == 2.0f);
+  REQUIRE(hit.normalen_vec_.x == 0.0f);
+  REQUIRE(hit.normalen_vec_.y == 1.0f);
+  REQUIRE(hit.normalen_vec_.z == 0.0f);
+  REQUIRE(hit.surface_pt_.x == 0.5f);
+  REQUIRE(hit.surface_pt_.y == 2.0f);
+  REQUIRE(hit.surface_pt_.z == 2.5f);
+  
+  hit = b.intersect(tonald);
+  REQUIRE(hit.hit_ == true);
+  REQUIRE(hit.distance_ == 0.5f);
+  REQUIRE(hit.normalen_vec_.x == -1.0f);
+  REQUIRE(hit.normalen_vec_.y == 0.0f);
+  REQUIRE(hit.normalen_vec_.z == 0.0f);
+  REQUIRE(hit.surface_pt_.x == 0.0f);
+  REQUIRE(hit.surface_pt_.y == 1.0f);
+  REQUIRE(hit.surface_pt_.z == 0.0f);
+  
+  hit = b.intersect(zonald);
+  REQUIRE(hit.hit_ == true);
+  REQUIRE(hit.distance_ == Approx(sqrt(10.0f)));
+  REQUIRE(hit.normalen_vec_.x == 0.0f);
+  REQUIRE(hit.normalen_vec_.y == -1.0f);
+  REQUIRE(hit.normalen_vec_.z == 0.0f);
+  REQUIRE(hit.surface_pt_.x == 0.5f);
+  REQUIRE(hit.surface_pt_.y == 1.0f);
+  REQUIRE(hit.surface_pt_.z == 3.0f);
+  
+  hit = b.intersect(nonald);
+  REQUIRE(hit.hit_ == false);
+  REQUIRE(hit.distance_ == INFINITY);
+  REQUIRE(hit.normalen_vec_.x == 0.0f);
+  REQUIRE(hit.normalen_vec_.y == 0.0f);
+  REQUIRE(hit.normalen_vec_.z == 0.0f);
+  REQUIRE(hit.surface_pt_.x == 0.0f);
+  REQUIRE(hit.surface_pt_.y == 0.0f);
+  REQUIRE(hit.surface_pt_.z == 0.0f);
+
+}
+
 /* ------------------ Aufgabe 7.1 ------------------ */
 
 TEST_CASE("Camera: prints camera (every member)", "[aufgabe7.1]") {
