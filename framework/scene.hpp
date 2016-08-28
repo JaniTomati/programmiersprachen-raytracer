@@ -18,15 +18,14 @@
 
 struct Scene {
 
-  void loadSDF(std::string const& file_in);
-
     // member
-  unsigned int width; // canvas size 
-  unsigned int height; 
+  unsigned int width_; // canvas size (x * y)
+  unsigned int height_; 
   std::map<std::string, Material> materials_; 
   std::vector<std::shared_ptr<Shape>> shapes_;
   std::vector<std::shared_ptr<LightSource>> light_;
-  std::shared_ptr<Camera> cam_;
+  Camera cam_; // std::shared_ptr<Camera>
+  std::string fileOut_;
 
 };
 
