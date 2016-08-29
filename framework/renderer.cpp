@@ -24,18 +24,40 @@ void Renderer::render()
 
   for (unsigned y = 0; y < height_; ++y) {
     for (unsigned x = 0; x < width_; ++x) {
-      Pixel p(x,y);
-      if ( ((x/checkersize)%2) != ((y/checkersize)%2)) {
-        p.color = Color(0.0, 1.0, float(x)/height_);
-      } else {
-        p.color = Color(1.0, 0.0, float(y)/width_);
-      }
+      glm::vec3 origin(float(x)/float(width_)*2.0f -1.0f, float(y)/float(height_)*2.0f-1.0f,0.0f);
+      glm::vec3 direction(0,0,-1.0);
+      Ray ray(origin, direction);
+
+      p.color = raytrace(ray, 2);
 
       write(p);
     }
   }
+
+
   ppm_.save(filename_);
 }
+
+Color Renderer::raytrace(Ray const& ray, unsigned int depth)
+  {
+    // OptiHit closest;
+    // for (auto const& shape : scene.shape_) 
+    // geschweifteKlammerauf
+    //   auto current = shape->intersect
+    //   falls was getroffen, ist current.distance näher???
+    Sphere debugSphere(glm::vec3(0,0,-3.0), 1.0);
+
+      auto optihit = debugSphere.intersect(ray);
+
+      Pixel p(x,y);
+      if (optihit.hit_) {
+        return Color(1,1,1);
+      } else {
+        return Color(0,0,0);
+      }
+    
+    // nDotL = std::max(0.0, glm::dot(n,l))
+  }
 
 void Renderer::write(Pixel const& p)
 {

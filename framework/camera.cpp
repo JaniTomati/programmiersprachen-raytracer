@@ -19,6 +19,12 @@ Camera::Camera(std::string const& name, double aovX) :
 
 Camera::~Camera() {}
 
+  // casts Ray from camera into certain direction
+Ray Camera::castRay(glm::vec3 const& direction) {
+  Ray camRay {origin_, direction};
+  return camRay;
+} 
+
   // print Camera
 std::ostream& Camera::print(std::ostream& os) const {
   os << "Name: " << name_ << "\n"

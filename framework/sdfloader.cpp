@@ -169,6 +169,6 @@ Scene SDFloader::loadSDF(std::string const& fileIn) {
   }
 
   file.close();
- return scene;
+  return scene;
 
 }
