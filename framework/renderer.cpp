@@ -15,13 +15,7 @@ Renderer::Renderer(Scene const& scene) :
   ppm_(scene_.width_, scene_.height_)
   {}
 
-<<<<<<< HEAD
-//tangens 
-void Renderer::render()
-{
-=======
 void Renderer::render() {
->>>>>>> 596a063725c57441f1b889cdb96a2c6d701ab550
   const std::size_t checkersize = 20;
 
   for (unsigned y = 0; y < scene_.height_; ++y) {
