@@ -9,6 +9,7 @@
 #include "camera.hpp"
 #include "lightsource.hpp"
 #include "color.hpp"
+#include "composite.hpp"
 #include <iostream>      
 #include <fstream>
 #include <sstream> 
