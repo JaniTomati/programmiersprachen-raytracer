@@ -24,11 +24,12 @@ class Renderer {
 
 public:
   // New Constructor: Takes Scene (width, height and filename redundant => members of scene)
-  Renderer(Scene const& scene);
+  //Renderer(Scene const& scene);
+  Renderer(unsigned w, unsigned h, std::string const& file);
 
   void render();
   void write(Pixel const& p);
-  Color raytrace(Ray const& ray, unsigned int depth) const;
+  Color raytrace(Ray const& ray, unsigned int depth);
   // Color shade(OptiHit const&, Ray const& ray, unsigned int depth);
 
   inline std::vector<Color> const& colorbuffer() const {
@@ -36,7 +37,9 @@ public:
   }
 
 private:
-  Scene scene_;
+  //Scene scene_;
+  unsigned width_,height_;
+  std::string filename_;
   std::vector<Color> colorbuffer_;
   PpmWriter ppm_;
 };

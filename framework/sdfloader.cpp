@@ -115,10 +115,10 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> ambientLight.b;
 
             // new entry in light_ (ptr)
-          scene.light_.push_back(std::make_shared<LightSource>(lightName, lightPos, diffuseLight, ambientLight));
+          std::make_shared<LightSource>(lightName, lightPos, diffuseLight, ambientLight);
           ++vectorSizeLight;
 
-          std::cout << "Added Light: " << *scene.light_[vectorSizeLight - 1] << std::endl;
+          std::cout << "Added Light: " << scene.lights_[vectorSizeLight - 1] << std::endl;
         }
 
           // Loads Camera # camera
