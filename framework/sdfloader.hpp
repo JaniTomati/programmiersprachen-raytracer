@@ -1,4 +1,4 @@
-// // SDFloader.hpp (Ray-Tracer 7.1)
+// SDFloader.hpp (Ray-Tracer 7.1)
 
 #ifndef BUW_SDFLOADER_HPP
 #define BUW_SDFLOADER_HPP
@@ -6,8 +6,10 @@
 
 struct SDFloader {
 
-  Scene loadSDF(std::string const& fileIn);
+  // under construction
 
 };
+
+Scene loadSDF(std::string const& fileIn);
 
 #endif // BUW_SDFLOADER_HPP
