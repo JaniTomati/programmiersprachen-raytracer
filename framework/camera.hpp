@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <iostream>
+#include "ray.hpp"
 
 struct Camera {
 
@@ -15,6 +16,7 @@ struct Camera {
    // Destructor
   ~Camera();
 
+  Ray castRay(glm::vec3 const& direction);  
    // print camera
   std::ostream& print(std::ostream& os) const;
 
