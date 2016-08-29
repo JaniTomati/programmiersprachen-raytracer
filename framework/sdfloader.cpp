@@ -1,9 +1,8 @@
 // SDFloader.cpp (Ray-Tracer 7.1)
 
 #include "sdfloader.hpp"
-#include "renderer.hpp"
 
-Scene SDFloader::loadSDF(std::string const& fileIn) {
+Scene loadSDF(std::string const& fileIn) {
 
   std::ifstream file;
   std::string line;

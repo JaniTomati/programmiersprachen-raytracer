@@ -16,18 +16,19 @@
 #include "sphere.hpp"
 #include "pixel.hpp"
 #include "ppmwriter.hpp"
+#include "sdfloader.hpp"
 #include <string>
 #include <glm/glm.hpp>
 
 class Renderer {
 
 public:
-  Renderer(unsigned w, unsigned h, std::string const& file);
+  // New Constructor: Takes Scene (width, height and filename redundant => members of scene)
+  Renderer(Scene const& scene);
 
   void render();
   void write(Pixel const& p);
-  Color raytrace(Ray const& ray, unsigned int depth);
-
+  Color raytrace(Ray const& ray, unsigned int depth) const;
   // Color shade(OptiHit const&, Ray const& ray, unsigned int depth);
 
   inline std::vector<Color> const& colorbuffer() const {
@@ -36,10 +37,7 @@ public:
 
 private:
   Scene scene_;
-  unsigned width_;
-  unsigned height_;
   std::vector<Color> colorbuffer_;
-  std::string filename_;
   PpmWriter ppm_;
 };
 
