@@ -17,6 +17,7 @@ Renderer::Renderer(unsigned w, unsigned h, std::string const& file)
   , ppm_(width_, height_)
 {}
 
+//tangens 
 void Renderer::render()
 {
   const std::size_t checkersize = 20;
