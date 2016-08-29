@@ -24,7 +24,7 @@ struct Scene {
   unsigned int height_; 
   std::map<std::string, Material> materials_; 
   std::vector<std::shared_ptr<Shape>> shapes_;
-  std::vector<std::shared_ptr<LightSource>> light_;
+  std::vector<LightSource> lights_;
   Camera cam_; // std::shared_ptr<Camera>
   std::string fileOut_;
 
