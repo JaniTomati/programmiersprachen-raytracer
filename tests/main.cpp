@@ -769,7 +769,7 @@ TEST_CASE("Composite: intersect() checks which hit point is nearest to the ray o
   typedef std::shared_ptr<Shape> shape_ptr;
 
   shape_ptr s1 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -4.0f}, 5.2});
-  shape_ptr s2 = std::make_shared<Sphere>(Sphere {{4.f, 0.0f, -5.0f}, 2.1});
+  shape_ptr s2 = std::make_shared<Sphere>(Sphere {{4.0f, 0.0f, -5.0f}, 2.1});
   shape_ptr s3 = std::make_shared<Sphere>(Sphere {{1.0f, 0.3f, 2.0f}, 1.9});
   shape_ptr s4 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -3.0f}, 2.2});
   shape_ptr s5 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -2.9f}, 2.2});
