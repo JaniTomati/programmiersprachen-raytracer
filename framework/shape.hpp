@@ -14,6 +14,7 @@
 
 struct OptiHit;
 
+  /* * Component */ 
 class Shape {
 public:
   Shape();

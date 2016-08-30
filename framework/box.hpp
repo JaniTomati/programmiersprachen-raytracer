@@ -7,6 +7,7 @@
 #include <cmath>
 #include <catch.hpp>
 
+  /* * Leaf */ 
 class Box : public Shape {
 public: 
   Box();
@@ -22,7 +23,7 @@ public:
   void maximum(glm::vec3 const& max);
   void minimum(glm::vec3 const& min);
   bool in_box(glm::vec3 const& point) const;
-  //intersect
+    //intersect
   OptiHit intersect(Ray const& ray) const override;
   glm::vec3 calc_normalen_vec(OptiHit const& hit) const override;
 

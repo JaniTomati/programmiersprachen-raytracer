@@ -5,6 +5,7 @@
 #include "shape.hpp"
 #include "ray.hpp"
 
+  /* * Leaf */ 
 class Sphere : public Shape {
 public: 
   Sphere();
@@ -19,7 +20,7 @@ public:
   float radius() const;
   void center(glm::vec3 const& ctr);
   void radius(float rad);
-  //intersect
+    //intersect
   OptiHit intersect(Ray const& ray) const override;
   glm::vec3 calc_normalen_vec(OptiHit const& hit) const override;
 
