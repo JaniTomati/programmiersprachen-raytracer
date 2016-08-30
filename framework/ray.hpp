@@ -33,4 +33,6 @@ struct Ray {
 
 };
 
+Ray transformRay(glm::mat4 const& mat, Ray const& ray);
+
 #endif // BUW_RAY_HPP

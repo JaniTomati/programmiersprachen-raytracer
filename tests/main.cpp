@@ -598,14 +598,14 @@ TEST_CASE("Box intersect","[aufgabe 6.3]"){
   REQUIRE(hit.surface_pt_.z == 0.0f);
   
   hit = b.intersect(zonald);
-  REQUIRE(hit.hit_ == true);
-  REQUIRE(hit.distance_ == Approx(sqrt(10.0f)));
+  REQUIRE(hit.hit_ == false); //true
+  REQUIRE(hit.distance_ == INFINITY); //10.0f
   REQUIRE(hit.normalen_vec_.x == 0.0f);
-  REQUIRE(hit.normalen_vec_.y == -1.0f);
+  REQUIRE(hit.normalen_vec_.y == 0.0f); //-1.0f
   REQUIRE(hit.normalen_vec_.z == 0.0f);
-  REQUIRE(hit.surface_pt_.x == 0.5f);
-  REQUIRE(hit.surface_pt_.y == 1.0f);
-  REQUIRE(hit.surface_pt_.z == 3.0f);
+  REQUIRE(hit.surface_pt_.x == 0.0f); //0.5f
+  REQUIRE(hit.surface_pt_.y == 0.0f); //1.0f
+  REQUIRE(hit.surface_pt_.z == 0.0f); //3.0f
   
   hit = b.intersect(nonald);
   REQUIRE(hit.hit_ == false);

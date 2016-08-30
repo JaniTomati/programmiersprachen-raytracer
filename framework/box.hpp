@@ -24,7 +24,7 @@ public:
   void minimum(glm::vec3 const& min);
   bool in_box(glm::vec3 const& point) const;
     //intersect
-  OptiHit intersect(Ray const& ray) const override;
+  OptiHit intersect(Ray const& rayn) const override;
   glm::vec3 calc_normalen_vec(OptiHit const& hit) const override;
 
 private:

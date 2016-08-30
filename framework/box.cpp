@@ -85,187 +85,223 @@
     min_ = min;
   }
 
- OptiHit Box::intersect(Ray const& ray) const{
+//  OptiHit Box::intersect(Ray const& ray) const{
+
+//   OptiHit hit{this};
+//   int z_1{0};
+//   int z_2{0};
+//   int z_3{0};
+//   float s_1{0};
+//   float s_2{0};
+//   float s_3{0};
+
+//   //Ebenen parallel zur y,z-Ebene
+//   if (ray.direction().x != 0){
+//     //für die Seiten beim Minimum
+//     glm::vec3 schnittpunkt_1{};
+//     float v_1 = (min_.x-ray.origin().x) / ray.direction().x;
+//     schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
+//     schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
+//     schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
+//     //für die Seiten beim Maximum
+//     glm::vec3 schnittpunkt_2{};
+//     float v_2 = (max_.x-ray.origin().x) / ray.direction().x;
+//     schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
+//     schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
+//     schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
+//     //Tests ob Schnittpunkte in der Box
+//     //beide in Box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_1 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
+//       distance_two_vecs(schnittpunkt_2,ray.origin()) );
+//       z_1 = 1;
+//     }
+//     //nur schnittpunkt_1 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == false)
+//     {
+//       s_1 = distance_two_vecs(schnittpunkt_1,ray.origin());
+//       z_1 = 1;
+//     }
+//     //nur schnittpunkt_2 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == false &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_1 = distance_two_vecs(schnittpunkt_2,ray.origin());
+//       z_1 = 1;
+//     }
+//     //std::cout << "Erstens: distance = " << s_1 << " und " << z_1 << std::endl;
+//   }
+//   //Ebenen parallel zur x,z-Ebene
+//   if (ray.direction().y != 0){
+//     //für die Seiten beim Minimum
+//     glm::vec3 schnittpunkt_1{};
+//     float v_1 = (min_.y-ray.origin().y) / ray.direction().y;
+//     schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
+//     schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
+//     schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
+//     //für die Seiten beim Maximum
+//     glm::vec3 schnittpunkt_2{};
+//     float v_2 = (max_.y-ray.origin().y) / ray.direction().y;
+//     schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
+//     schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
+//     schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
+//     //Tests ob Schnittpunkte in der Box
+//     //beide in Box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_2 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
+//       distance_two_vecs(schnittpunkt_2,ray.origin()) );
+//       z_2 = 1;
+//     }
+//     //nur schnittpunkt_1 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == false)
+//     {
+//       s_2 = distance_two_vecs(schnittpunkt_1,ray.origin());
+//       z_2 = 1;
+//     }
+//     //nur schnittpunkt_2 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == false &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_2 = distance_two_vecs(schnittpunkt_2,ray.origin());
+//       z_2 = 1;
+//     }
+//     //std::cout << "Zweitens: distance = " << s_2 << " und " << z_2 << std::endl;
+//   }
+//   //Ebenen parallel zur x,y-Ebene
+//   if (ray.direction().z != 0){
+//     //für die Seiten beim Minimum
+//     glm::vec3 schnittpunkt_1{};
+//     float v_1 = (min_.z-ray.origin().z) / ray.direction().z;
+//     schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
+//     schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
+//     schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
+//     //für die Seiten beim Maximum
+//     glm::vec3 schnittpunkt_2{};
+//     float v_2 = (max_.z-ray.origin().z) / ray.direction().z;
+//     schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
+//     schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
+//     schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
+//     //Tests ob Schnittpunkte in der Box
+//     //beide in Box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_3 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
+//       distance_two_vecs(schnittpunkt_2,ray.origin()) );
+//       z_3 = 1;
+//     }
+//     //nur schnittpunkt_1 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == true &&
+//       is_in_box(min_, max_, schnittpunkt_2) == false)
+//     {
+//       s_3 = distance_two_vecs(schnittpunkt_1,ray.origin());
+//       z_3 = 1;
+//     }
+//     //nur schnittpunkt_2 in box
+//     if (is_in_box(min_, max_, schnittpunkt_1) == false &&
+//       is_in_box(min_, max_, schnittpunkt_2) == true)
+//     {
+//       s_3 = distance_two_vecs(schnittpunkt_2,ray.origin());
+//       z_3 = 1;
+//     }
+//     //std::cout << "Drittens: distance = " << s_3 << " und " << z_3 << std::endl;
+//   }
+
+//   //drei Schnittpunkte
+//   if (z_1 == 1 && z_2 == 1 && z_3 == 1){
+//     hit.distance_ = std::min(std::min(s_1,s_2),s_3);
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+
+//   //zwei Schnittpunkte
+//   if (z_1 == 1 && z_2 == 1 && z_3 == 0){
+//     hit.distance_ = std::min(s_1,s_2);
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+//   if (z_1 == 1 && z_3 == 1 && z_2 == 0){
+//     hit.distance_ = std::min(s_1,s_3);
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+//   if (z_2 == 1 && z_3 == 1 && z_1 == 0){
+//     hit.distance_ = std::min(s_2,s_3);
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+  
+//   //ein Schnittpunkt
+//   if (z_1 == 0 && z_2 == 0 && z_3 == 1){
+//     hit.distance_ = s_3;
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+//   if (z_1 == 0 && z_3 == 0 && z_2 == 1){
+//     hit.distance_ = s_2;
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+//   if (z_2 == 0 && z_3 == 0 && z_1 == 1){
+//     hit.distance_ = s_1;
+//     hit.hit_ = true;
+//     hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+//     hit.normalen_vec_ = this->calc_normalen_vec(hit);
+//   }
+
+//   //kein Schnittpunkt
+//   if (z_1 == 0 && z_2 == 0 && z_3 == 0){
+//     hit.hit_ = false;
+//   }
+
+//   return hit;
+// }
+
+OptiHit Box::intersect(Ray const& rayn) const{
 
   OptiHit hit{this};
-  int z_1{0};
-  int z_2{0};
-  int z_3{0};
-  float s_1{0};
-  float s_2{0};
-  float s_3{0};
+  Ray ray = rayn; //transformRay(get_transf_inv(), rayn);
+  float new_min = -INFINITY, new_max = INFINITY;
 
-  //Ebenen parallel zur y,z-Ebene
-  if (ray.direction().x != 0){
-    //für die Seiten beim Minimum
-    glm::vec3 schnittpunkt_1{};
-    float v_1 = (min_.x-ray.origin().x) / ray.direction().x;
-    schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
-    schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
-    schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
-    //für die Seiten beim Maximum
-    glm::vec3 schnittpunkt_2{};
-    float v_2 = (max_.x-ray.origin().x) / ray.direction().x;
-    schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
-    schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
-    schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
-    //Tests ob Schnittpunkte in der Box
-    //beide in Box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_1 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
-      distance_two_vecs(schnittpunkt_2,ray.origin()) );
-      z_1 = 1;
-    }
-    //nur schnittpunkt_1 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == false)
-    {
-      s_1 = distance_two_vecs(schnittpunkt_1,ray.origin());
-      z_1 = 1;
-    }
-    //nur schnittpunkt_2 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == false &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_1 = distance_two_vecs(schnittpunkt_2,ray.origin());
-      z_1 = 1;
-    }
-    //std::cout << "Erstens: distance = " << s_1 << " und " << z_1 << std::endl;
-  }
-  //Ebenen parallel zur x,z-Ebene
-  if (ray.direction().y != 0){
-    //für die Seiten beim Minimum
-    glm::vec3 schnittpunkt_1{};
-    float v_1 = (min_.y-ray.origin().y) / ray.direction().y;
-    schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
-    schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
-    schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
-    //für die Seiten beim Maximum
-    glm::vec3 schnittpunkt_2{};
-    float v_2 = (max_.y-ray.origin().y) / ray.direction().y;
-    schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
-    schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
-    schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
-    //Tests ob Schnittpunkte in der Box
-    //beide in Box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_2 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
-      distance_two_vecs(schnittpunkt_2,ray.origin()) );
-      z_2 = 1;
-    }
-    //nur schnittpunkt_1 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == false)
-    {
-      s_2 = distance_two_vecs(schnittpunkt_1,ray.origin());
-      z_2 = 1;
-    }
-    //nur schnittpunkt_2 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == false &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_2 = distance_two_vecs(schnittpunkt_2,ray.origin());
-      z_2 = 1;
-    }
-    //std::cout << "Zweitens: distance = " << s_2 << " und " << z_2 << std::endl;
-  }
-  //Ebenen parallel zur x,y-Ebene
-  if (ray.direction().z != 0){
-    //für die Seiten beim Minimum
-    glm::vec3 schnittpunkt_1{};
-    float v_1 = (min_.z-ray.origin().z) / ray.direction().z;
-    schnittpunkt_1.x = ray.origin().x + v_1*ray.direction().x;
-    schnittpunkt_1.y = ray.origin().y + v_1*ray.direction().y;
-    schnittpunkt_1.z = ray.origin().z + v_1*ray.direction().z;
-    //für die Seiten beim Maximum
-    glm::vec3 schnittpunkt_2{};
-    float v_2 = (max_.z-ray.origin().z) / ray.direction().z;
-    schnittpunkt_2.x = ray.origin().x + v_2*ray.direction().x;
-    schnittpunkt_2.y = ray.origin().y + v_2*ray.direction().y;
-    schnittpunkt_2.z = ray.origin().z + v_2*ray.direction().z;
-    //Tests ob Schnittpunkte in der Box
-    //beide in Box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_3 = std::min( distance_two_vecs(schnittpunkt_1,ray.origin()),
-      distance_two_vecs(schnittpunkt_2,ray.origin()) );
-      z_3 = 1;
-    }
-    //nur schnittpunkt_1 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == true &&
-      is_in_box(min_, max_, schnittpunkt_2) == false)
-    {
-      s_3 = distance_two_vecs(schnittpunkt_1,ray.origin());
-      z_3 = 1;
-    }
-    //nur schnittpunkt_2 in box
-    if (is_in_box(min_, max_, schnittpunkt_1) == false &&
-      is_in_box(min_, max_, schnittpunkt_2) == true)
-    {
-      s_3 = distance_two_vecs(schnittpunkt_2,ray.origin());
-      z_3 = 1;
-    }
-    //std::cout << "Drittens: distance = " << s_3 << " und " << z_3 << std::endl;
-  }
+  float t1 = (min_.x - ray.origin_.x)/ray.direction_.x;
+  float t2 = (max_.x - ray.origin_.x)/ray.direction_.x;
+  new_min = std::max(new_min,std::min(t1,t2));
+  new_max = std::min(new_max,std::max(t1,t2));
 
-  //drei Schnittpunkte
-  if (z_1 == 1 && z_2 == 1 && z_3 == 1){
-    hit.distance_ = std::min(std::min(s_1,s_2),s_3);
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
+  t1 = (min_.y - ray.origin_.y)/ray.direction_.y;
+  t2 = (max_.y - ray.origin_.y)/ray.direction_.y;
+  new_min = std::max(new_min,std::min(t1,t2));
+  new_max = std::min(new_max,std::max(t1,t2));
 
-  //zwei Schnittpunkte
-  if (z_1 == 1 && z_2 == 1 && z_3 == 0){
-    hit.distance_ = std::min(s_1,s_2);
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
-  if (z_1 == 1 && z_3 == 1 && z_2 == 0){
-    hit.distance_ = std::min(s_1,s_3);
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
-  if (z_2 == 1 && z_3 == 1 && z_1 == 0){
-    hit.distance_ = std::min(s_2,s_3);
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
-  
-  //ein Schnittpunkt
-  if (z_1 == 0 && z_2 == 0 && z_3 == 1){
-    hit.distance_ = s_3;
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
-  if (z_1 == 0 && z_3 == 0 && z_2 == 1){
-    hit.distance_ = s_2;
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
-  if (z_2 == 0 && z_3 == 0 && z_1 == 1){
-    hit.distance_ = s_1;
-    hit.hit_ = true;
-    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
-    hit.normalen_vec_ = this->calc_normalen_vec(hit);
-  }
+  t1 = (min_.z - ray.origin_.z)/ray.direction_.z;
+  t2 = (max_.z - ray.origin_.z)/ray.direction_.z;
+  new_min = std::max(new_min,std::min(t1,t2));
+  new_max = std::min(new_max,std::max(t1,t2));
 
-  //kein Schnittpunkt
-  if (z_1 == 0 && z_2 == 0 && z_3 == 0){
-    hit.hit_ = false;
+  if (new_max > std::max(0.0f, new_min))
+  {
+    hit.distance_ = sqrt(new_min*new_min*(
+                      ray.direction_.x*ray.direction_.x +
+                      ray.direction_.y*ray.direction_.y +
+                      ray.direction_.z*ray.direction_.z ));
+    hit.surface_pt_ = this->calc_surface_pt(ray, hit.distance_);
+    //hit.surface_pt_ = glm::vec3(hit.surface_pt_);
+    hit.hit_ = true;  
+    hit.normalen_vec_ = this->calc_normalen_vec(hit);
+    //hit.normalen_vec_ = glm::normalize(glm::vec3(glm::transpose(get_transf_inv())*glm::vec4(hit.normalen_vec_, 0.0f)));
   }
-
   return hit;
 }
 
