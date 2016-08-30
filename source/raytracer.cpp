@@ -6,7 +6,7 @@
 int main(int argc, char* argv[]) {
   Scene scene = loadSDF("../doc/BeispielSzene1.txt");
   unsigned const width = scene.width_;
-  unsigned const height = scene. height_;
+  unsigned const height = scene.height_;
   std::string const filename = scene.fileOut_;
   // unsigned const width = 600;
   // unsigned const height = 600;

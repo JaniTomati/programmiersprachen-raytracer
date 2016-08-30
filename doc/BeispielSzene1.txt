@@ -5,6 +5,8 @@ define material test 0 0 0 1 1 1 0 0 0 1
 # geometry 
 define shape box rbottom -100 -80 -200 100 80 -100 red
 define shape sphere bsphere 0 0 -100 50 blue
+# composites 
+define shape composite root rbottom bsphere
 # light 
 define light sun 1000 700 0 .2 .2 .2 .8 .8 .8 
 # camera 

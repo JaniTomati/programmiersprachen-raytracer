@@ -9,6 +9,7 @@
 #include "camera.hpp"
 #include "lightsource.hpp"
 #include "color.hpp"
+#include "composite.hpp"
 #include <iostream>      
 #include <fstream>
 #include <sstream> 
@@ -22,7 +23,8 @@ struct Scene {
   unsigned int width_; // canvas size (x * y)
   unsigned int height_; 
   std::map<std::string, Material> materials_; 
-  std::vector<std::shared_ptr<Shape>> shapes_;
+  // std::vector<std::shared_ptr<Shape>> shapes_;
+  std::shared_ptr<Composite> composite_; // Added with exercise 7.2
   std::vector<LightSource> lights_;
   Camera cam_; // std::shared_ptr<Camera>
   std::string fileOut_;

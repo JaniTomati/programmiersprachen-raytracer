@@ -1,12 +1,14 @@
 // SDFloader.cpp (Ray-Tracer 7.1)
 
 #include "sdfloader.hpp"
+#include <map>
 
 Scene loadSDF(std::string const& fileIn) {
 
   std::ifstream file;
   std::string line;
   file.open(fileIn); // opens input file 
+  std::map<std::string, std::shared_ptr<Shape>> findeShape; // added with 7.2 composite
   Scene loadedScene; 
 
   if(file.is_open()) {
@@ -69,10 +71,14 @@ Scene loadSDF(std::string const& fileIn) {
             Material boxMat = loadedScene.materials_.find(boxClrName) -> second;
 
               // new entry in shapes_ (ptr)
-            loadedScene.shapes_.push_back(std::make_shared<Box>(boxName, boxMat, boxMin, boxMax));
-            ++vectorSizeShapes;
+            // loadedScene.shapes_.push_back(std::make_shared<Box>(boxName, boxMat, boxMin, boxMax));
+            // ++vectorSizeShapes;
 
-            std::cout << "Added Box: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
+            auto box = std::make_shared<Box>(boxName, boxMat, boxMin, boxMax);
+            findeShape[boxName] = box;
+
+            // std::cout << "Added Box: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
+            std::cout << "Added Box: " << *box << std::endl;
           }
 
           else if(keyword == "sphere") {
@@ -92,10 +98,36 @@ Scene loadSDF(std::string const& fileIn) {
             Material sphereMat = loadedScene.materials_.find(sphereClrName) -> second;
 
               // new entry in shapes_ (ptr)
-            loadedScene.shapes_.push_back(std::make_shared<Sphere>(sphereName, sphereMat, sphereCtr, sphereRad));
-            ++vectorSizeShapes;
+            // loadedScene.shapes_.push_back(std::make_shared<Sphere>(sphereName, sphereMat, sphereCtr, sphereRad));
+            // ++vectorSizeShapes;
 
-            std::cout << "Added Sphere: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
+            auto sphere = std::make_shared<Sphere>(sphereName, sphereMat, sphereCtr, sphereRad);
+            findeShape[sphereName] = sphere;
+            // std::cout << "Added Sphere: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
+            std::cout << "Added Sphere: " << *sphere << std::endl;
+          }
+
+            // loads composites # composites 
+          else if(keyword == "composite") {
+            std::string compositeName;
+            std::string shapeName;
+
+            ss >> compositeName;
+            loadedScene.composite_ = std::make_shared<Composite>(compositeName);
+
+            while(!ss.eof()) {
+              ss >> shapeName;
+              auto foundShape = findeShape.find(shapeName);
+
+              if(foundShape != findeShape.end()) {
+                loadedScene.composite_ -> addShape(foundShape -> second);
+              } 
+
+              else {
+                std::cout << "ERROR: Shape " << shapeName << " could not be found!" << std::endl;
+              }
+            }
+            std::cout << "Added Composite: " << *loadedScene.composite_ << std::endl;
           }
         }
 
@@ -139,7 +171,7 @@ Scene loadSDF(std::string const& fileIn) {
         }
       }
 
-        // renders Scene 
+        // renders Scene # render 
       else if (keyword == "render") {
         std::string camName;
         ss >> camName;
@@ -162,7 +194,7 @@ Scene loadSDF(std::string const& fileIn) {
         } 
       }
 
-        // Prints Comment Line 
+        // Prints Comment Line #
       else if (keyword == "#") {
         std::cout << line << std::endl;
       }
