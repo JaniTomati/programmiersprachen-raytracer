@@ -9,28 +9,33 @@
 
 #include "renderer.hpp"
 
-// Renderer::Renderer(Scene const& scene) : 
-//   scene_ (scene),
-//   colorbuffer_(scene_.width_ * scene_.height_, Color(0.0, 0.0, 0.0)),
-//   ppm_(scene_.width_, scene_.height_)
-//   {}
+Renderer::Renderer(Scene const& scene) : 
+  scene_ (scene),
+  colorbuffer_(scene_.width_ * scene_.height_, Color(0.0, 0.0, 0.0)),
+  ppm_(scene_.width_, scene_.height_)
+  {}
 
-Renderer::Renderer(unsigned w, unsigned h, std::string const& file):
-    width_(w)
+Renderer::Renderer(Scene const& scene, unsigned w, unsigned h, std::string const& file):
+    scene_(scene)
+  , width_(w)
   , height_(h)
-  , colorbuffer_(w*h, Color(0.0, 0.0, 0.0))
+  //, colorbuffer_(w*h, Color(0.0, 0.0, 0.0))
+  , colorbuffer_(scene_.width_ * scene_.height_, Color(0.0, 0.0, 0.0))
   , filename_(file)
   , ppm_(width_, height_)
   {}
 
 void Renderer::render() {
   //const std::size_t checkersize = 20;
-
+  width_ = scene_.width_;
+  height_ = scene_.height_; 
+  filename_ = scene_.fileOut_;
   for (unsigned y = 0; y < height_; ++y) {
     for (unsigned x = 0; x < width_; ++x) {
-      glm::vec3 origin(float(x)/float(width_)*2.0f -1.0f, float(y)/float(height_)*2.0f-1.0f,0.0f);
-      glm::vec3 direction(0,0,-1.0);
-      Ray ray(origin, direction);
+      //glm::vec3 origin(float(x)/float(width_)*2.0f -1.0f, float(y)/float(height_)*2.0f-1.0f,0.0f);
+      //glm::vec3 direction(0,0,-1.0);
+      //Ray ray(origin, direction);
+      Ray ray = scene_.cam_.calc_eye_ray(x,y,scene_.height_,scene_.width_);
   //for (unsigned y = 0; y < scene_.height_; ++y) {
     //for (unsigned x = 0; x < scene_.width_; ++x) {
       Pixel p(x,y);
@@ -63,22 +68,26 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
   //Pixel p(x,y);
 
   // Beispielszene mit einer Sphere und einem Licht
-  Sphere debugSphere(glm::vec3(0, 0, -3.0), 1.0);
-  LightSource heiligenschein{};
-  OptiHit closest = debugSphere.intersect(ray);
+  // Material m1{"Plüschpelzpummel", {0.1f,0.2f,0.3f},
+  // {0.3f,0.4f,0.5f}, {0.6f,0.7f,0.8f}, 0.9f};
+  // Sphere debugSphere("Testsphäre",
+  // m1, glm::vec3(0, 0, -3.0), 1.0);
+  // LightSource heiligenschein{};
+  OptiHit closest = scene_.composite_->intersect(ray); // = debugSphere.intersect(ray);
   Color color;
 
   if (closest.hit_){
+
     float c = 0.001;
     
     //Lichtberechnung
 
-    //for (auto const& lightsource : scene_.lights){
+    for (auto const& lightsource : scene_.lights_){
 
       // Ray, das vom Oberflächenpunkt der Shape
       // aus zur Lightsource verläuft
       Ray lightray{closest.surface_pt_,
-      heiligenschein.pos_-closest.surface_pt_};
+      lightsource.pos_-closest.surface_pt_};
       // Verschieben des Ursprungs weg von der Shape
       lightray.origin_ += lightray.direction_ * c;
 
@@ -87,11 +96,13 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
       float nl = glm::dot(closest.normalen_vec_,l);
 
       //diffuse Lichtberechnung
-      color = color + heiligenschein.ip_ *
+      color = color + lightsource.ip_ *
       (closest.closest_shape_->material().diffuse()) *
-      std::max(nl,0.0f);
+      std::max(nl,0.0f) +
+      lightsource.ia_ *
+      (closest.closest_shape_->material().ambient());
       
-    //}
+    }
   }
   
   else {

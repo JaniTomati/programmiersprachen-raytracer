@@ -24,8 +24,8 @@ class Renderer {
 
 public:
   // New Constructor: Takes Scene (width, height and filename redundant => members of scene)
-  //Renderer(Scene const& scene);
-  Renderer(unsigned w, unsigned h, std::string const& file);
+  Renderer(Scene const& scene);
+  Renderer(Scene const& scene, unsigned w, unsigned h, std::string const& file);
 
   void render();
   void write(Pixel const& p);
@@ -37,7 +37,7 @@ public:
   }
 
 private:
-  //Scene scene_;
+  Scene scene_;
   unsigned width_,height_;
   std::string filename_;
   std::vector<Color> colorbuffer_;

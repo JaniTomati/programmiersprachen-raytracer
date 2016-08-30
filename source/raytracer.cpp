@@ -13,7 +13,8 @@ int main(int argc, char* argv[]) {
   // std::string const filename = "./checkerboard.ppm";
 
   //Renderer app(scene);
-  Renderer app(width, height, filename);
+  //Renderer app(width, height, filename);
+  Renderer app(scene, width, height, filename);
 
   std::thread thr([&app]() { app.render(); });
 

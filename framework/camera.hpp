@@ -16,7 +16,8 @@ struct Camera {
    // Destructor
   ~Camera();
 
-  Ray castRay(glm::vec3 const& direction);  
+  Ray castRay(glm::vec3 const& direction);
+  Ray calc_eye_ray(int x, int y, int height, int width);
    // print camera
   std::ostream& print(std::ostream& os) const;
 
