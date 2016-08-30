@@ -4,10 +4,13 @@
 //#include <sdfloader.hpp>
 
 int main(int argc, char* argv[]) {
-  //Scene scene = loadSDF("../doc/rendertest.txt");
-  unsigned const width = 600;
-  unsigned const height = 600;
-  std::string const filename = "./checkerboard.ppm";
+  Scene scene = loadSDF("../doc/BeispielSzene1.txt");
+  unsigned const width = scene.width_;
+  unsigned const height = scene. height_;
+  std::string const filename = scene.fileOut_;
+  // unsigned const width = 600;
+  // unsigned const height = 600;
+  // std::string const filename = "./checkerboard.ppm";
 
   //Renderer app(scene);
   Renderer app(width, height, filename);

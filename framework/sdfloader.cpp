@@ -7,16 +7,20 @@ Scene loadSDF(std::string const& fileIn) {
   std::ifstream file;
   std::string line;
   file.open(fileIn); // opens input file 
-  Scene scene; 
+  Scene loadedScene; 
 
   if(file.is_open()) {
+    // std::cout << "The file is open." << std::endl;
 
-    while(!file.eof()) { // end of file 
-      std::getline(file, line);
+    while(std::getline(file, line)) {
+     // std::cout << line << std::endl;
 
-       // keyword 
+        // keyword 
       std::stringstream ss;
       std::string keyword; 
+
+      ss << line;
+      ss >> keyword;
 
       if(keyword == "define") {
         ss >> keyword;
@@ -37,40 +41,17 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> mat.ks_.b;
           ss >> mat.m_;
 
-          scene.materials_[mat.name_] = mat;
+          loadedScene.materials_[mat.name_] = mat;
 
           std::cout << "Added Material: " << mat << std::endl;
         }
 
           // Loads Shapes # geometry
         else if(keyword == "shape") {
-          ss << keyword;
+          ss >> keyword;
           unsigned int vectorSizeShapes = 0;
 
-          if(keyword == "sphere") {
-            std::string sphereName;
-            glm::vec3 sphereCtr; 
-            float sphereRad;
-            std::string sphereClrName;
-
-            ss >> sphereName;
-            ss >> sphereCtr.x;
-            ss >> sphereCtr.y;
-            ss >> sphereCtr.z;
-            ss >> sphereRad;
-            ss >> sphereClrName;
-
-              // find() points from Name to Material (http://en.cppreference.com/w/cpp/container/map/find)
-            Material sphereMat = scene.materials_.find(sphereClrName) -> second;
-
-              // new entry in shapes_ (ptr)
-            scene.shapes_.push_back(std::make_shared<Sphere>(sphereName, sphereMat, sphereCtr, sphereRad));
-            ++vectorSizeShapes;
-
-            std::cout << "Added Sphere: " << *scene.shapes_[vectorSizeShapes - 1] << std::endl; 
-          }
-
-          else if(keyword == "box") {
+          if(keyword == "box") {
             std::string boxName;
             glm::vec3 boxMin;
             glm::vec3 boxMax;
@@ -85,17 +66,40 @@ Scene loadSDF(std::string const& fileIn) {
             ss >> boxMax.z;
             ss >> boxClrName;
 
-            Material boxMat = scene.materials_.find(boxClrName) -> second;
+            Material boxMat = loadedScene.materials_.find(boxClrName) -> second;
 
               // new entry in shapes_ (ptr)
-            scene.shapes_.push_back(std::make_shared<Box>(boxName, boxMat, boxMin, boxMax));
+            loadedScene.shapes_.push_back(std::make_shared<Box>(boxName, boxMat, boxMin, boxMax));
             ++vectorSizeShapes;
 
-            std::cout << "Added Box: " << *scene.shapes_[vectorSizeShapes - 1] << std::endl; 
+            std::cout << "Added Box: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
+          }
+
+          else if(keyword == "sphere") {
+            std::string sphereName;
+            glm::vec3 sphereCtr; 
+            float sphereRad;
+            std::string sphereClrName;
+
+            ss >> sphereName;
+            ss >> sphereCtr.x;
+            ss >> sphereCtr.y;
+            ss >> sphereCtr.z;
+            ss >> sphereRad;
+            ss >> sphereClrName;
+
+              // find() points from Name to Material (http://en.cppreference.com/w/cpp/container/map/find)
+            Material sphereMat = loadedScene.materials_.find(sphereClrName) -> second;
+
+              // new entry in shapes_ (ptr)
+            loadedScene.shapes_.push_back(std::make_shared<Sphere>(sphereName, sphereMat, sphereCtr, sphereRad));
+            ++vectorSizeShapes;
+
+            std::cout << "Added Sphere: " << *loadedScene.shapes_[vectorSizeShapes - 1] << std::endl;
           }
         }
 
-          // Loads Light # light - from right above 
+          // Loads Light # light 
         else if(keyword == "light") {
           unsigned int vectorSizeLight = 0;
           std::string lightName; 
@@ -115,10 +119,10 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> ambientLight.b;
 
             // new entry in light_ (ptr)
-          std::make_shared<LightSource>(lightName, lightPos, diffuseLight, ambientLight);
+          loadedScene.lights_.push_back(LightSource {lightName, lightPos, diffuseLight, ambientLight});
           ++vectorSizeLight;
 
-          std::cout << "Added Light: " << scene.lights_[vectorSizeLight - 1] << std::endl;
+          std::cout << "Added Light: " << loadedScene.lights_[vectorSizeLight - 1] << std::endl;
         }
 
           // Loads Camera # camera
@@ -129,45 +133,44 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> cameraName;
           ss >> cameraAoV;
 
-          auto cam_ = std::make_shared<Camera>(cameraName, cameraAoV);
+          loadedScene.cam_ = Camera {cameraName, cameraAoV};
 
-          std::cout << "Added Camera: " << scene.cam_ << std::endl;
+          std::cout << "Added Camera: " << loadedScene.cam_ << std::endl;
         }
       }
 
-        // Renders Scene 
+        // renders Scene 
       else if (keyword == "render") {
         std::string camName;
         ss >> camName;
 
           // checks whether camera exists so the frame can be rendered 
-        if (camName == scene.cam_.name_) {
-          ss >> scene.fileOut_;
-          ss >> scene.width_;
-          ss >> scene.height_;
+        if (camName == loadedScene.cam_.name_) {
+          ss >> loadedScene.fileOut_;
+          ss >> loadedScene.width_;
+          ss >> loadedScene.height_;
 
-          std::cout << "Camera: " << scene.cam_ << "\n Output File: " << scene.fileOut_
-          << "\n Resolution: " << scene.width_ << " x " << scene.height_ << std::endl;
+          std::cout << "Camera: " << loadedScene.cam_.name_ << "\n Output File: " << loadedScene.fileOut_
+          << "\n Resolution: " << loadedScene.width_ << " x " << loadedScene.height_ << std::endl;
 
         }
 
         else {
             // else camera object doesn't exist yet 
-          std::cerr << "Camera " << camName << " does not exist." << std::endl;
+          std::cerr << "ERROR: Camera " << camName << " does not exist." << std::endl;
 
-        }
-
+        } 
       }
 
         // Prints Comment Line 
       else if (keyword == "#") {
         std::cout << line << std::endl;
       }
-
     }
+
+    file.close();
   }
 
-  file.close();
-  return scene;
+  return loadedScene;
 
 }
