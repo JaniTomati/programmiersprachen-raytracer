@@ -124,10 +124,10 @@ Scene loadSDF(std::string const& fileIn) {
               } 
 
               else {
-                std::cout << "ERROR: Shape " << shapeName << " could not be found!" << std::endl;
+                std::cout << "ERROR: Shape " << shapeName << " could not be found!" << "\n" << std::endl;
               }
             }
-            std::cout << "Added Composite: " << *loadedScene.composite_ << std::endl;
+            std::cout << "Added Composite: \n" << *loadedScene.composite_ << std::endl;
           }
         }
 
@@ -182,14 +182,14 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> loadedScene.width_;
           ss >> loadedScene.height_;
 
-          std::cout << "Camera: " << loadedScene.cam_.name_ << "\n Output File: " << loadedScene.fileOut_
-          << "\n Resolution: " << loadedScene.width_ << " x " << loadedScene.height_ << std::endl;
+          std::cout << "Camera: " << loadedScene.cam_.name_ << "\n" << "Output File: " << loadedScene.fileOut_
+          << "\n" << "Resolution: " << loadedScene.width_ << " x " << loadedScene.height_ << "\n" <<std::endl;
 
         }
 
         else {
             // else camera object doesn't exist yet 
-          std::cerr << "ERROR: Camera " << camName << " does not exist." << std::endl;
+          std::cerr << "ERROR: Camera " << camName << " could not be found!" << std::endl;
 
         } 
       }
