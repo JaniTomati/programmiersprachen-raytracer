@@ -20,6 +20,7 @@ float Composite::area() const {
   float result = 0;
   for (auto const& shape : shapes_) {
     result = shape -> area();
+    std::cout << shape -> name() << ": " << result << " (Area) \n" << std::endl;
   }
   return result;
 }
@@ -28,6 +29,7 @@ float Composite::volume() const {
   float result = 0;
   for (auto const& shape : shapes_) {
     result = shape -> volume();
+    std::cout << shape -> name() << ": " << result << " (Volume) \n"<< std::endl;
   }
   return result;
 }
@@ -46,12 +48,12 @@ void Composite::addShape(std::shared_ptr<Shape> const& shape) {
   shapes_.push_back(shape);
 }
 
-  // removes a shape from the composite => erase-remove idiom (does it work in this case?) 
+  // removes a shape from the composite => erase-remove idiom
 void Composite::removeShape(std::shared_ptr<Shape> const& shape) {
   shapes_.erase(std::remove(shapes_.begin(), shapes_.end(), shape), shapes_.end()); 
 }
 
-  // returns closestHit: hit point of a certain ray that is closest to the camera
+  // returns closestHit: hit point of a certain ray that is closest to the ray origin
 OptiHit Composite::intersect(Ray const& ray) const {
 
   OptiHit currentHit;
@@ -70,6 +72,8 @@ glm::vec3 Composite::calc_normalen_vec(OptiHit const& hit) const {
   glm::vec3 result;
   for (auto const& shape : shapes_) {
     result = shape -> calc_normalen_vec(hit);
+    std::cout << shape -> name() << ": (" << result.x << ", " << result.y <<
+    ", " << result.z << ")" << std::endl;
   }
   return result;
 }

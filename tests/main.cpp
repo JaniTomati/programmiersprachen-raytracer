@@ -7,6 +7,7 @@
 #include "box.hpp"
 #include "camera.hpp"
 #include "lightsource.hpp"
+#include "scene.hpp"
 
 /* ------------------ Aufgabe 5.2 ------------------ */
 
@@ -637,6 +638,160 @@ TEST_CASE("LightSource: prints light (every member)", "[aufgabe7.1]") {
 
   LightSource lucifer {"Lucifer", {0.5f, 0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.4f, 0.1f, 0.1f}};
   lucifer.print(std::cout);
+
+}
+
+/* ------------------ Aufgabe 7.2 ------------------ */
+
+TEST_CASE("Composite: Adding and removing shapes out of the composite", "[aufgabe7.2") {
+  typedef std::shared_ptr<Shape> shape_ptr;
+  typedef glm::vec3 vec;
+
+  shape_ptr b1 = std::make_shared<Box>();
+  REQUIRE(0.0f == b1 -> area());
+
+  vec min2, max2;
+  min2.x = 1.0f;
+  min2.y = 2.3f;
+  min2.z = 4.1f;
+  max2.x = 0.0f;
+  max2.y = 2.5f;
+  max2.z = 1.2f;
+
+  shape_ptr b2 = std::make_shared<Box>(min2, max2);
+  REQUIRE(Approx(7.36f) == b2 -> area());
+
+  shape_ptr s1 = std::make_shared<Sphere>();
+  REQUIRE(0.0f == s1 -> area());
+  
+  vec ctr2;
+  ctr2.x = 0.4f;
+  ctr2.y = 2.3f;
+  ctr2.z = 1.2f;
+
+  shape_ptr s2 = std::make_shared<Sphere>(ctr2, 4.3f);
+  REQUIRE(Approx(232.3522f) == s2 -> area());
+
+  Composite comp {};
+  comp.addShape(b1);
+  comp.addShape(s1);
+  comp.addShape(b2);
+  comp.addShape(s2);
+
+  comp.print(std::cout); // testing the print function
+
+  comp.removeShape(b1);
+  comp.removeShape(b2);
+  comp.removeShape(s2);
+
+  comp.print(std::cout);
+
+}
+
+TEST_CASE("Composite: gets area of every shape in the composite and prints it", "[aufgabe7.2") {
+  typedef std::shared_ptr<Shape> shape_ptr;
+  typedef glm::vec3 vec;
+
+  shape_ptr b1 = std::make_shared<Box>();
+  REQUIRE(0.0f == b1 -> area());
+
+  vec min2, max2;
+  min2.x = 1.0f;
+  min2.y = 2.3f;
+  min2.z = 4.1f;
+  max2.x = 0.0f;
+  max2.y = 2.5f;
+  max2.z = 1.2f;
+
+  shape_ptr b2 = std::make_shared<Box>(min2, max2);
+  REQUIRE(Approx(7.36f) == b2 -> area());
+
+  shape_ptr s1 = std::make_shared<Sphere>();
+  REQUIRE(0.0f == s1 -> area());
+  
+  vec ctr2;
+  ctr2.x = 0.4f;
+  ctr2.y = 2.3f;
+  ctr2.z = 1.2f;
+
+  shape_ptr s2 = std::make_shared<Sphere>(ctr2, 4.3f);
+  REQUIRE(Approx(232.3522f) == s2 -> area());
+
+  Composite comp {};
+  comp.addShape(b1);
+  comp.addShape(s1);
+  comp.addShape(b2);
+  comp.addShape(s2);
+
+  comp.area();
+
+}
+
+TEST_CASE("Composite: gets volume of every shape in the composite and prints it", "[aufgabe7.2]") {
+  typedef std::shared_ptr<Shape> shape_ptr;
+  typedef glm::vec3 vec;
+
+  shape_ptr b1 = std::make_shared<Box>();
+  REQUIRE(0.0f == b1 -> volume());
+
+  vec min2, max2;
+  min2.x = 1.0f;
+  min2.y = 2.3f;
+  min2.z = 4.1f;
+  max2.x = 0.0f;
+  max2.y = 2.5f;
+  max2.z = 1.2f;
+
+  shape_ptr b2 = std::make_shared<Box>(min2, max2);
+  REQUIRE(Approx(0.58f) == b2 -> volume());
+
+  shape_ptr s1 = std::make_shared<Sphere>();
+  REQUIRE(0.0f == s1 -> volume());
+  
+  vec ctr2;
+  ctr2.x = 0.4f;
+  ctr2.y = 2.3f;
+  ctr2.z = 1.2f;
+
+  shape_ptr s2 = std::make_shared<Sphere>(ctr2, 4.3f);
+  REQUIRE(Approx(333.0381f) == s2 -> volume());
+
+  Composite comp {};
+  comp.addShape(b1);
+  comp.addShape(s1);
+  comp.addShape(b2);
+  comp.addShape(s2);
+
+  comp.volume();
+}
+
+TEST_CASE("Composite: intersect() checks which hit point is nearest to the ray origin", "[aufgabe7.2]") {
+  typedef std::shared_ptr<Shape> shape_ptr;
+
+  shape_ptr s1 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -4.0f}, 5.2});
+  shape_ptr s2 = std::make_shared<Sphere>(Sphere {{4.f, 0.0f, -5.0f}, 2.1});
+  shape_ptr s3 = std::make_shared<Sphere>(Sphere {{1.0f, 0.3f, 2.0f}, 1.9});
+  shape_ptr s4 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -3.0f}, 2.2});
+  shape_ptr s5 = std::make_shared<Sphere>(Sphere {{0.0f, 0.0f, -2.9f}, 2.2});
+
+  Composite comp {};
+  comp.addShape(s1);
+  comp.addShape(s2);
+  comp.addShape(s3);
+  comp.addShape(s4);
+
+  Ray ray {{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -1.0f}};
+  OptiHit hit1 = s1 -> intersect(ray);
+  OptiHit hit2 = s2 -> intersect(ray);
+  OptiHit hit4 = s4 -> intersect(ray);
+  OptiHit hit5 = s5 -> intersect(ray);
+  OptiHit hitComp = comp.intersect(ray);
+  REQUIRE(hit4.distance_ == hitComp.distance_);
+  REQUIRE(hit2.hit_ != hitComp.hit_);
+  REQUIRE(hit2.distance_ > hitComp.distance_);
+  REQUIRE(hit1.hit_ == hitComp.hit_);
+  REQUIRE(hit1.distance_ > hitComp.distance_);
+  REQUIRE(hit5.distance_ < hitComp.distance_);
 
 }
 
