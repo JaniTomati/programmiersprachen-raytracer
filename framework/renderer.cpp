@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "renderer.hpp"
+#include <cmath>
+#include <glm/glm.hpp>
 
 Renderer::Renderer(Scene const& scene) : 
   scene_ (scene),
@@ -83,21 +85,33 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
       // Ray, das vom Oberflächenpunkt der Shape
       // aus zur Lightsource verläuft
       Ray lightray{closest.surface_pt_,
-      lightsource.pos_-closest.surface_pt_};
+       lightsource.pos_-closest.surface_pt_};
       // Verschieben des Ursprungs weg von der Shape
       lightray.origin_ += lightray.direction_ * c;
 
-      // Erstellen der Parameter für diffuse Beleuchtung
+      // Erstellen der Parameter für Beleuchtung
       glm::vec3 l = lightray.direction_;
       float nl = glm::dot(closest.normalen_vec_,l);
+      glm::vec3 r = glm::normalize(2 *
+        nl * closest.normalen_vec_ - l);
+      glm::vec3 v = glm::normalize(glm::vec3 {ray.direction_.x * (-1),
+        ray.direction_.y * (-1), ray.direction_.z * (-1)});
 
-      //diffuse Lichtberechnung
-      color = color + lightsource.ip_ *
-      (closest.closest_shape_->material().diffuse()) *
-      std::max(nl,0.0f) +
-      lightsource.ia_ *
-      (closest.closest_shape_->material().ambient());
+
+      // Diffuse Lichtberechnung
+      // Ambiente Lichtberechnung
+      // Einfache Spiegelung
+      // Spekulare Reflexion
+      color = color + lightsource.ia_ *
+        (closest.closest_shape_->material().ambient()) +
+        lightsource.ip_ *
+        ((closest.closest_shape_->material().diffuse()) *
+        std::max(nl,0.0f) +
+        (closest.closest_shape_->material().specular()) *
+        std::pow(glm::dot(r, v),
+        closest.closest_shape_->material().exponent()));
       
+
     }
   }
   
