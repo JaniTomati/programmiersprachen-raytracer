@@ -11,10 +11,10 @@ Scene loadSDF(std::string const& fileIn) {
   std::map<std::string, std::shared_ptr<Shape>> findeShape; // added with 7.2 composite
   Scene loadedScene; 
 
-  if(file.is_open()) {
+  if (file.is_open()) {
     // std::cout << "The file is open." << std::endl;
 
-    while(std::getline(file, line)) {
+    while (std::getline(file, line)) {
      // std::cout << line << std::endl;
 
         // keyword 
@@ -24,11 +24,11 @@ Scene loadSDF(std::string const& fileIn) {
       ss << line;
       ss >> keyword;
 
-      if(keyword == "define") {
+      if (keyword == "define") {
         ss >> keyword;
 
           // Loads Material # materials
-        if(keyword == "material") {
+        if (keyword == "material") {
           Material mat;
 
           ss >> mat.name_;
@@ -49,11 +49,11 @@ Scene loadSDF(std::string const& fileIn) {
         }
 
           // Loads Shapes # geometry
-        else if(keyword == "shape") {
+        else if (keyword == "shape") {
           ss >> keyword;
           unsigned int vectorSizeShapes = 0;
 
-          if(keyword == "box") {
+          if (keyword == "box") {
             std::string boxName;
             glm::vec3 boxMin;
             glm::vec3 boxMax;
@@ -81,7 +81,7 @@ Scene loadSDF(std::string const& fileIn) {
             std::cout << "Added Box: " << *box << std::endl;
           }
 
-          else if(keyword == "sphere") {
+          else if (keyword == "sphere") {
             std::string sphereName;
             glm::vec3 sphereCtr; 
             float sphereRad;
@@ -108,18 +108,18 @@ Scene loadSDF(std::string const& fileIn) {
           }
 
             // loads composites # composites 
-          else if(keyword == "composite") {
+          else if (keyword == "composite") {
             std::string compositeName;
             std::string shapeName;
 
             ss >> compositeName;
             loadedScene.composite_ = std::make_shared<Composite>(compositeName);
 
-            while(!ss.eof()) {
+            while (!ss.eof()) {
               ss >> shapeName;
               auto foundShape = findeShape.find(shapeName);
 
-              if(foundShape != findeShape.end()) {
+              if (foundShape != findeShape.end()) {
                 loadedScene.composite_ -> addShape(foundShape -> second);
               } 
 
@@ -129,10 +129,14 @@ Scene loadSDF(std::string const& fileIn) {
             }
             std::cout << "Added Composite: \n" << *loadedScene.composite_ << std::endl;
           }
+
+          else {
+            std::cerr << "ERROR! Shape keyword " << keyword << " could not be found!" << std::endl;
+          }
         }
 
           // Loads Light # light 
-        else if(keyword == "light") {
+        else if (keyword == "light") {
           unsigned int vectorSizeLight = 0;
           std::string lightName; 
           glm::vec3 lightPos;
@@ -158,7 +162,7 @@ Scene loadSDF(std::string const& fileIn) {
         }
 
           // Loads Camera # camera
-        else if(keyword == "camera") {
+        else if (keyword == "camera") {
           std::string cameraName;
           double cameraAoV;
           glm::vec3 cameraPos;
@@ -180,6 +184,68 @@ Scene loadSDF(std::string const& fileIn) {
           loadedScene.cam_ = Camera {cameraName, cameraAoV, cameraPos, cameraDir, cameraUp};
 
           std::cout << "Added Camera: " << loadedScene.cam_ << std::endl;
+        }
+      }
+
+        // transform Object # transform <name> <transformation> <parameter>
+      else if (keyword == "transform") {
+        std::string shapeName;
+        ss >> shapeName;
+
+        auto foundShape2 = findeShape.find(shapeName);
+        if(foundShape2 != findeShape.end()) {
+          ss >> keyword;
+
+          if (keyword == "scale") {
+            glm::vec3 s;
+            ss >> s.x;
+            ss >> s.y;
+            ss >> s.z;
+
+            (foundShape2 -> second) -> scale(s);
+          }
+
+          else if (keyword == "translate") {
+            glm::vec3 v;
+            ss >> v.x;
+            ss >> v.y;
+            ss >> v.z;
+
+            (foundShape2 -> second) -> translate(v);
+          }
+
+          else if (keyword == "rotate") {
+            float phi;
+            glm::vec3 axis;
+            ss >> phi;
+            ss >> axis.x;
+            ss >> axis.y;
+            ss >> axis.z;
+
+            if (axis == glm::vec3 {1.0f, 0.0f, 0.0f}) {
+              (foundShape2 -> second) -> rotateX(phi);
+            }
+
+            else if (axis == glm::vec3 {0.0f, 1.0f, 0.0f}) {
+              (foundShape2 -> second) -> rotateY(phi);
+            }
+
+            else if (axis == glm::vec3 {0.0f, 0.0f, 1.0f}) {
+              (foundShape2 -> second) -> rotateZ(phi);
+            } 
+
+            else {
+              std::cerr << "ERROR! Please enter a coordinate axis!" << std::endl;
+            }
+          }
+
+          else {
+            std::cerr << "ERROR! Transformation keyword " << keyword << " could not be found!" << std::endl;
+          }
+        } 
+
+        else {
+          std::cerr << "ERROR! Shape " << shapeName << " could not be found!" << "\n" << std::endl;
         }
       }
 
