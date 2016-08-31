@@ -41,7 +41,7 @@ void Renderer::render() {
       // glm::vec3 direction(0, 0, -1.0);
       // Ray ray(origin, direction);
 
-      p.color = raytrace(ray, 2);
+      p.color = raytrace(ray, 1);
 
       write(p);
     }
@@ -75,17 +75,16 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
   Color color;
 
   if (closest.hit_){
-
-    float c = 0.001;
     
+    float c = 0.001;
     // Lichtberechnung
     for (auto const& lightsource : scene_.lights_){
-
       // Ray, das vom Oberflächenpunkt der Shape
       // aus zur Lightsource verläuft
       Ray lightray{closest.surface_pt_,
        lightsource.pos_-closest.surface_pt_};
-      // Verschieben des Ursprungs weg von der Shape
+      // Verschieben des Ursprungs weg von der Shape,
+        // um ungewollte Kollision zu vermeiden
       lightray.origin_ += lightray.direction_ * c;
 
       // Erstellen der Parameter für ambiente Beleuchtung
@@ -110,26 +109,70 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
         std::pow(glm::dot(r, v),
         closest.closest_shape_->material().exponent()) +
         (closest.closest_shape_->material().diffuse()) *
-        std::max(nl,0.0f));
+        std::max(nl, 0.0f));
       }
+    }
+    Color speculatius = closest.closest_shape_->material().specular();
+    // Refraction (Glaskugeleffekt)
+    if (depth > 0){
+      glm::vec3 v = ray.direction_;
+      float vnorm = glm::dot(closest.normalen_vec_, v);
+      glm::vec3 r = glm::normalize(v - 2 *
+        vnorm * closest.normalen_vec_);
 
-      // // Refraction (Glaskugeleffekt)
-      // Color spec = clotest.closest_shape_->material().specular();
-      // if (depth > 0){
-      //   glm::vec3 v = ray.direction_;
-      //   float vnorm = glm::dot(closest.normalen_vec_, v);
-      //   glm::vec3 r = glm::normalize(v -
-      //     vnorm * closest.normalen_vec_ * 2);
+      Ray reflection_ray{closest.surface_pt_, r};
+      // Verschieben des Ursprungs weg von der Shape,
+      // um ungewollte Kollision zu vermeiden 
+      reflection_ray.origin_ += reflection_ray.direction_ * c;
+      
+      // Rekursion entsprechend der Tiefe (depth)
+      Color reflection_color = raytrace(reflection_ray, depth - 1);
+      // Man beachte den vierten Buchstaben!
+      Color refraction_color{};
 
-      //   Ray ref
+        // Bedingung, dass das Objekt reflektiert
+        // und die Tiefe noch nicht erreicht ist
+      if (closest.closest_shape_->material().refraction() > 0.15f &&
+        depth > 0){
+        float q;
+        float ri = closest.closest_shape_->material().refraction();
+        float c1 = glm::dot(closest.normalen_vec_, v);
+        // Überprüfung Kreuzprodukt (Winkelgröße)
+        if (c1 < 0){
+          c1 -= c1;
+          q = 1/ri;
+        }
+        // Bei 90° oder weniger
+        else{
+          q = ri;
+          closest.normalen_vec_ -= closest.normalen_vec_;
+        }
+        float c2 = 1 - q * q * (1 - c1 * c1);
+        // Und nochmal eine Runde, diesmal aufs Haus!
+        if (c2 > 0){
+          c2 = sqrt(c2);
+        }
+        else{
+          c2 = 0;
+        }
+        // Rechnung nach Fresnel, der coolen Socke
+        glm::vec3 fresnel_life_hack = glm::normalize(q * v +
+          (q * c1 - c2) * closest.normalen_vec_);
 
-      // }
+        Ray refraction_ray{closest.surface_pt_, fresnel_life_hack};
+        // Verschieben des Ursprungs weg von der Shape,
+        // um ungewollte Kollision zu vermeiden
+        refraction_ray.origin_ += refraction_ray.direction_ * c;
 
+        refraction_color = raytrace(refraction_ray, depth - 1);
+      }
+      color = color + reflection_color * speculatius *
+        closest.closest_shape_->material().refraction(); //+ refraction_color * 0.1f;
     }
   }
   
   else {
-    color = Color(0.4f,0.4f,0.5f); // dark grey background
+    color = Color(0,0,0.1f); // dark grey background
   }
 
   return color;
