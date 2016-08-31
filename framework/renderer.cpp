@@ -79,7 +79,6 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
     float c = 0.001;
     
     //Lichtberechnung
-
     for (auto const& lightsource : scene_.lights_){
 
       // Ray, das vom Oberflächenpunkt der Shape
@@ -97,20 +96,21 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
       glm::vec3 v = glm::normalize(glm::vec3 {ray.direction_.x * (-1),
         ray.direction_.y * (-1), ray.direction_.z * (-1)});
 
+      // Ambiente Lichtberechnung
+      color = color + lightsource.ia_ *
+        (closest.closest_shape_->material().ambient());
 
       // Diffuse Lichtberechnung
-      // Ambiente Lichtberechnung
       // Einfache Spiegelung
       // Spekulare Reflexion
-      color = color + lightsource.ia_ *
-        (closest.closest_shape_->material().ambient()) +
-        lightsource.ip_ *
-        ((closest.closest_shape_->material().diffuse()) *
-        std::max(nl,0.0f) +
+      if (scene_.composite_->intersect(lightray).hit_ == false){
+        color = color + lightsource.ip_ * (
         (closest.closest_shape_->material().specular()) *
         std::pow(glm::dot(r, v),
-        closest.closest_shape_->material().exponent()));
-      
+        closest.closest_shape_->material().exponent()) +
+        (closest.closest_shape_->material().diffuse()) *
+        std::max(nl,0.0f));
+      }
 
     }
   }
