@@ -15,23 +15,19 @@ Renderer::Renderer(Scene const& scene) :
   ppm_(scene_.width_, scene_.height_)
   {}
 
-Renderer::Renderer(Scene const& scene, unsigned w, unsigned h, std::string const& file):
-    scene_(scene)
-  , width_(w)
-  , height_(h)
-  //, colorbuffer_(w*h, Color(0.0, 0.0, 0.0))
-  , colorbuffer_(scene_.width_ * scene_.height_, Color(0.0, 0.0, 0.0))
-  , filename_(file)
-  , ppm_(width_, height_)
-  {}
+// Renderer::Renderer(Scene const& scene, unsigned w, unsigned h, std::string const& file):
+  //   scene_(scene)
+  // , width_(w)
+  // , height_(h)
+  // , colorbuffer_(w*h, Color(0.0, 0.0, 0.0))
+  // , ppm_(width_, height_)
+  // {}
 
 void Renderer::render() {
   //const std::size_t checkersize = 20;
-  width_ = scene_.width_;
-  height_ = scene_.height_; 
-  filename_ = scene_.fileOut_;
-  for (unsigned y = 0; y < height_; ++y) {
-    for (unsigned x = 0; x < width_; ++x) {
+
+  for (unsigned y = 0; y < scene_.height_; ++y) {
+    for (unsigned x = 0; x < scene_.width_; ++x) {
       //glm::vec3 origin(float(x)/float(width_)*2.0f -1.0f, float(y)/float(height_)*2.0f-1.0f,0.0f);
       //glm::vec3 direction(0,0,-1.0);
       //Ray ray(origin, direction);
@@ -50,7 +46,7 @@ void Renderer::render() {
   }
 
   //ppm_.save(scene_.fileOut_);
-  ppm_.save(filename_);
+  ppm_.save(scene_.fileOut_);
 }
 
 Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
@@ -73,7 +69,7 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
   // Sphere debugSphere("Testsphäre",
   // m1, glm::vec3(0, 0, -3.0), 1.0);
   // LightSource heiligenschein{};
-  OptiHit closest = scene_.composite_->intersect(ray); // = debugSphere.intersect(ray);
+  OptiHit closest = scene_.composite_ -> intersect(ray); // = debugSphere.intersect(ray);
   Color color;
 
   if (closest.hit_){
@@ -139,7 +135,7 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
 
 void Renderer::write(Pixel const& p) {
   // flip pixels, because of opengl glDrawPixels
-  size_t buf_pos = (width_*p.y + p.x);
+  size_t buf_pos = (scene_.width_*p.y + p.x);
   if (buf_pos >= colorbuffer_.size() || (int)buf_pos < 0) {
     std::cerr << "Fatal Error Renderer::write(Pixel p) : "
       << "pixel out of ppm_ : "
