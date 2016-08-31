@@ -124,7 +124,7 @@ Scene loadSDF(std::string const& fileIn) {
               } 
 
               else {
-                std::cout << "ERROR: Shape " << shapeName << " could not be found!" << "\n" << std::endl;
+                std::cerr << "ERROR! Shape " << shapeName << " could not be found!" << "\n" << std::endl;
               }
             }
             std::cout << "Added Composite: \n" << *loadedScene.composite_ << std::endl;
@@ -201,7 +201,7 @@ Scene loadSDF(std::string const& fileIn) {
 
         else {
             // else camera object doesn't exist yet 
-          std::cerr << "ERROR: Camera " << camName << " could not be found!" << std::endl;
+          std::cerr << "ERROR! Camera " << camName << " could not be found!" << std::endl;
 
         } 
       }
@@ -210,9 +210,18 @@ Scene loadSDF(std::string const& fileIn) {
       else if (keyword == "#") {
         std::cout << line << std::endl;
       }
+
+        // in case of wrong syntax 
+      else {
+        std::cerr << "ERROR! The following line: '" << line << "' could not be parsed! \n" << std::endl;
+      }
     }
 
     file.close();
+  }
+
+  else {
+    std:: cerr << "ERROR! The document " << fileIn << "could not be opened! \n" << std::endl;
   }
 
   return loadedScene;
