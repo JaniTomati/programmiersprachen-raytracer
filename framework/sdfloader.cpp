@@ -124,7 +124,7 @@ Scene loadSDF(std::string const& fileIn) {
               } 
 
               else {
-                std::cout << "ERROR: Shape " << shapeName << " could not be found!" << "\n" << std::endl;
+                std::cerr << "ERROR! Shape " << shapeName << " could not be found!" << "\n" << std::endl;
               }
             }
             std::cout << "Added Composite: \n" << *loadedScene.composite_ << std::endl;
@@ -161,11 +161,23 @@ Scene loadSDF(std::string const& fileIn) {
         else if(keyword == "camera") {
           std::string cameraName;
           double cameraAoV;
+          glm::vec3 cameraPos;
+          glm::vec3 cameraDir;
+          glm::vec3 cameraUp;
 
           ss >> cameraName;
           ss >> cameraAoV;
+          ss >> cameraPos.x;
+          ss >> cameraPos.y;
+          ss >> cameraPos.z;
+          ss >> cameraDir.x;
+          ss >> cameraDir.y;
+          ss >> cameraDir.z;
+          ss >> cameraUp.x;
+          ss >> cameraUp.y;
+          ss >> cameraUp.z;
 
-          loadedScene.cam_ = Camera {cameraName, cameraAoV};
+          loadedScene.cam_ = Camera {cameraName, cameraAoV, cameraPos, cameraDir, cameraUp};
 
           std::cout << "Added Camera: " << loadedScene.cam_ << std::endl;
         }
@@ -189,7 +201,7 @@ Scene loadSDF(std::string const& fileIn) {
 
         else {
             // else camera object doesn't exist yet 
-          std::cerr << "ERROR: Camera " << camName << " could not be found!" << std::endl;
+          std::cerr << "ERROR! Camera " << camName << " could not be found!" << std::endl;
 
         } 
       }
@@ -198,9 +210,18 @@ Scene loadSDF(std::string const& fileIn) {
       else if (keyword == "#") {
         std::cout << line << std::endl;
       }
+
+        // in case of wrong syntax 
+      else {
+        std::cerr << "ERROR! The following line: '" << line << "' could not be parsed! \n" << std::endl;
+      }
     }
 
     file.close();
+  }
+
+  else {
+    std:: cerr << "ERROR! The document " << fileIn << "could not be opened! \n" << std::endl;
   }
 
   return loadedScene;

@@ -27,12 +27,14 @@ struct Ray {
     return direction_;
   }
 
+  Ray transformRay(glm::mat4 const& mat);
+
     // member
   glm::vec3 origin_;
   glm::vec3 direction_;
 
 };
 
-Ray transformRay(glm::mat4 const& mat, Ray const& ray);
+Ray transformRay(glm::mat4 const& mat, Ray& ray);
 
 #endif // BUW_RAY_HPP

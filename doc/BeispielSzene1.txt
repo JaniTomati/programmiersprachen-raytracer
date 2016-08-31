@@ -20,7 +20,7 @@ define shape composite root asphere bsphere csphere abox bbox cbox dbox ebox gro
 define light sun1 -7 4 4 .7 .7 .6 .2 .2 .2
 define light sun2 4 10 1 .15 .15 .15 .15 .15 .15
 # camera 
-define camera eye 45.0 
+define camera eye 45.0 1 1 1 0 0 -1 0 1 0
 # render 
 render eye image.ppm 600 600 
 render bob bob.ppm 500 500
