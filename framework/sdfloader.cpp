@@ -42,6 +42,7 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> mat.ks_.g;
           ss >> mat.ks_.b;
           ss >> mat.m_;
+          ss >> mat.ri_;
 
           loadedScene.materials_[mat.name_] = mat;
 
@@ -124,14 +125,14 @@ Scene loadSDF(std::string const& fileIn) {
               } 
 
               else {
-                std::cerr << "ERROR! Shape " << shapeName << " could not be found!" << "\n" << std::endl;
+                std::cerr << "ERROR! Shape " << shapeName << " could not be found! \n" << std::endl;
               }
             }
             std::cout << "Added Composite: \n" << *loadedScene.composite_ << std::endl;
           }
 
           else {
-            std::cerr << "ERROR! Shape keyword " << keyword << " could not be found!" << std::endl;
+            std::cerr << "ERROR! Shape keyword " << keyword << " could not be found! \n" << std::endl;
           }
         }
 
@@ -235,12 +236,12 @@ Scene loadSDF(std::string const& fileIn) {
             } 
 
             else {
-              std::cerr << "ERROR! Please enter a coordinate axis!" << std::endl;
+              std::cerr << "ERROR! Please enter a coordinate axis! \n" << std::endl;
             }
           }
 
           else {
-            std::cerr << "ERROR! Transformation keyword " << keyword << " could not be found!" << std::endl;
+            std::cerr << "ERROR! Transformation keyword " << keyword << " could not be found! \n" << std::endl;
           }
         } 
 

@@ -27,7 +27,7 @@ struct Ray {
     return direction_;
   }
 
-  Ray transformRay(glm::mat4 const& mat);
+  Ray& transformRay(glm::mat4 const& mat);
 
     // member
   glm::vec3 origin_;
