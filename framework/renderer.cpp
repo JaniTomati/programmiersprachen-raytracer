@@ -71,14 +71,14 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
   // Sphere debugSphere("Testsphäre",
   // m1, glm::vec3(0, 0, -3.0), 1.0);
   // LightSource heiligenschein{};
-  OptiHit closest = scene_.composite_ -> intersect(ray); // = debugSphere.intersect(ray);
+  OptiHit closest = scene_.composite_->intersect(ray); // = debugSphere.intersect(ray);
   Color color;
 
   if (closest.hit_){
 
     float c = 0.001;
     
-    //Lichtberechnung
+    // Lichtberechnung
     for (auto const& lightsource : scene_.lights_){
 
       // Ray, das vom Oberflächenpunkt der Shape
@@ -88,14 +88,9 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
       // Verschieben des Ursprungs weg von der Shape
       lightray.origin_ += lightray.direction_ * c;
 
-      // Erstellen der Parameter für Beleuchtung
+      // Erstellen der Parameter für ambiente Beleuchtung
       glm::vec3 l = lightray.direction_;
       float nl = glm::dot(closest.normalen_vec_,l);
-      glm::vec3 r = glm::normalize(2 *
-        nl * closest.normalen_vec_ - l);
-      glm::vec3 v = glm::normalize(glm::vec3 {ray.direction_.x * (-1),
-        ray.direction_.y * (-1), ray.direction_.z * (-1)});
-
       // Ambiente Lichtberechnung
       color = color + lightsource.ia_ *
         (closest.closest_shape_->material().ambient());
@@ -104,6 +99,12 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
       // Einfache Spiegelung
       // Spekulare Reflexion
       if (scene_.composite_->intersect(lightray).hit_ == false){
+        // Erstellen der Parameter
+        glm::vec3 r = glm::normalize(2 *
+          nl * closest.normalen_vec_ - l);
+        glm::vec3 v = glm::normalize(glm::vec3 {ray.direction_.x * (-1),
+          ray.direction_.y * (-1), ray.direction_.z * (-1)});
+        // Lichtberechnung (diffus + spekular)
         color = color + lightsource.ip_ * (
         (closest.closest_shape_->material().specular()) *
         std::pow(glm::dot(r, v),
@@ -112,11 +113,23 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
         std::max(nl,0.0f));
       }
 
+      // // Refraction (Glaskugeleffekt)
+      // Color spec = clotest.closest_shape_->material().specular();
+      // if (depth > 0){
+      //   glm::vec3 v = ray.direction_;
+      //   float vnorm = glm::dot(closest.normalen_vec_, v);
+      //   glm::vec3 r = glm::normalize(v -
+      //     vnorm * closest.normalen_vec_ * 2);
+
+      //   Ray ref
+
+      // }
+
     }
   }
   
   else {
-    color = Color(0,0,0); // black (background)
+    color = Color(0.4f,0.4f,0.5f); // dark grey background
   }
 
   return color;
