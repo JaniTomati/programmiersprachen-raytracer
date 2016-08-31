@@ -161,11 +161,23 @@ Scene loadSDF(std::string const& fileIn) {
         else if(keyword == "camera") {
           std::string cameraName;
           double cameraAoV;
+          glm::vec3 cameraPos;
+          glm::vec3 cameraDir;
+          glm::vec3 cameraUp;
 
           ss >> cameraName;
           ss >> cameraAoV;
+          ss >> cameraPos.x;
+          ss >> cameraPos.y;
+          ss >> cameraPos.z;
+          ss >> cameraDir.x;
+          ss >> cameraDir.y;
+          ss >> cameraDir.z;
+          ss >> cameraUp.x;
+          ss >> cameraUp.y;
+          ss >> cameraUp.z;
 
-          loadedScene.cam_ = Camera {cameraName, cameraAoV};
+          loadedScene.cam_ = Camera {cameraName, cameraAoV, cameraPos, cameraDir, cameraUp};
 
           std::cout << "Added Camera: " << loadedScene.cam_ << std::endl;
         }
