@@ -1,0 +1,18 @@
+# materials 
+define material red 1 0 0 .9 .1 .1 .8 .8 .8 50
+define material green 0 1 0 .1 .9 .1 .8 .8 .8 50
+define material blue 0 0 1 .1 .1 .9 .8 .8 .8 50
+# geometry 
+define shape sphere asphere -.5 -.5 -3 0.4 blue
+define shape sphere bsphere 0 0 -10 1 red
+define shape sphere csphere 3 4 -30 5 green
+define shape box abox  .7 .7 -4 1.3 1.3 -3 red
+# composites 
+define shape composite root asphere bsphere csphere abox
+# light 
+define light sun -7 5 0 .8 1 1 .3 .25 .3 
+# camera 
+define camera eye 45.0 0 0 0 0 0 -1 0 1 0
+# render 
+render eye image.ppm 480 480 
+render bob bob.ppm 500 500
