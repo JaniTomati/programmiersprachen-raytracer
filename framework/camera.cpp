@@ -26,22 +26,16 @@ Camera::Camera(std::string const& name, double aovX, glm::vec3 const& ori, glm::
 
 Camera::~Camera() {}
 
-  // casts Ray from camera into certain direction
-Ray Camera::castRay(glm::vec3 const& direction) const {
-  Ray camRay {origin_, direction};
-  return camRay;
-} 
-
 Ray Camera::calc_eye_ray(int x, int y, int height, int width) const {
 
     glm::vec3 direction{float(x) * 1.0 / float(width) - 0.5,
                         float(y) * 1.0 / float(height) - 0.5, 
-                        -1.0 * (0.5 / tan(aovX_/2))}; // distance = 0.5 / tan(winkel/2)
-    Ray ray{origin_, direction};
-    //transf_ =  transformMatrix();
+                        -1.0 * (0.5 / tan(aovX_/2))}; // distance to canvas = 0.5 / tan(angle / 2)
+  
+    Ray camRay{origin_, direction};
+    auto transformedCam = transformCam();
 
-    //return transformRay(transf_ , ray);
-    return ray;
+    return camRay.transformRay(transformedCam);
 }
 
 /* * Kameratansformation (Abbildungen):
@@ -57,7 +51,7 @@ Ray Camera::calc_eye_ray(int x, int y, int height, int width) const {
   // to fit the new system
 glm::mat4 Camera::transformCam() const {
   glm::vec3 e = origin_;
-  glm::vec3 n = direction_;
+  glm::vec3 n = glm::normalize(direction_);
   glm::vec3 up = upVector_;
 
   glm::vec3 u = glm::normalize(glm::cross(n, up));
