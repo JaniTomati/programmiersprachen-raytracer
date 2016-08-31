@@ -12,6 +12,7 @@
 #include <iostream>
 #include "color.hpp"
 
+typedef glm::mat4 Matrix;
 struct OptiHit;
 
   /* * Component */ 
@@ -19,20 +20,36 @@ class Shape {
 public:
   Shape();
   Shape(std::string const& name, Material const& mat);
+  Shape(std::string const& name, Material const& mat, Matrix const& worldTransform);
+
   virtual ~Shape(); // Aufgabe 5.8
   virtual float area() const = 0; // not implemented on this level --> children classes are able to override the function
   virtual float volume() const = 0;
-  virtual std::ostream& print(std::ostream& os) const; 
+  virtual OptiHit intersect(Ray const& ray) const = 0;
+  virtual glm::vec3 calc_normalen_vec(OptiHit const& hit) const = 0;
+  virtual std::ostream& print(std::ostream& os) const;
+  glm::vec3 calc_surface_pt(Ray const& ray, float distance) const;
+
+
+    // added with exercise 7.6 (Transformations)
+  virtual void translate(glm::vec3 const& v);
+  virtual void scale(glm::vec3 const& s);
+  virtual void rotateX(float phi);
+  virtual void rotateY(float phi);
+  virtual void rotateZ(float phi);
+
+    // getter
   std::string name() const;
   Material const& material() const;
-  //intersect
-  virtual OptiHit intersect(Ray const& ray) const = 0;
-  glm::vec3 calc_surface_pt(Ray const& ray, float distance) const;
-  virtual glm::vec3 calc_normalen_vec(OptiHit const& hit) const = 0;
+  Matrix world_transformation() const;
+  Matrix world_transformation_inv() const;
 
 protected:
   std::string name_;
   Material mat_;
+    // added with exercise 7.6 (Transformations)
+  Matrix worldTransform_;
+  Matrix worldTransformInv_;
 };
 
 struct OptiHit {

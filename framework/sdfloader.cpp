@@ -201,7 +201,7 @@ Scene loadSDF(std::string const& fileIn) {
 
         else {
             // else camera object doesn't exist yet 
-          std::cerr << "ERROR! Camera " << camName << " could not be found!" << std::endl;
+          std::cerr << "ERROR! Camera " << camName << " could not be found! \n" << std::endl;
 
         } 
       }
