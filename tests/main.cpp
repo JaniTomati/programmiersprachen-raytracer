@@ -645,7 +645,7 @@ TEST_CASE("LightSource: prints light (every member)", "[aufgabe7.1]") {
 
 /* ------------------ Aufgabe 7.2 ------------------ */
 
-TEST_CASE("Composite: Adding and removing shapes out of the composite", "[aufgabe7.2") {
+TEST_CASE("Composite: Adding and removing shapes out of the composite", "[aufgabe7.2]") {
   typedef std::shared_ptr<Shape> shape_ptr;
   typedef glm::vec3 vec;
 
@@ -690,7 +690,7 @@ TEST_CASE("Composite: Adding and removing shapes out of the composite", "[aufgab
 
 }
 
-TEST_CASE("Composite: gets area of every shape in the composite and prints it", "[aufgabe7.2") {
+TEST_CASE("Composite: gets area of every shape in the composite and prints it", "[aufgabe7.2]") {
   typedef std::shared_ptr<Shape> shape_ptr;
   typedef glm::vec3 vec;
 
@@ -799,7 +799,7 @@ TEST_CASE("Composite: intersect() checks which hit point is nearest to the ray o
 
 /* ------------------ Aufgabe 7.6 ------------------ */
 
-TEST_CASE("Shape: set worldTransformInv_", "[aufgabe7.6") {
+TEST_CASE("Shape: set worldTransformInv_", "[aufgabe7.6]") {
 
 	// /!\ glm::mat4 [column][line], [Spalte][Zeile]
 
@@ -871,7 +871,7 @@ TEST_CASE("Shape: set worldTransformInv_", "[aufgabe7.6") {
 
 }
 
-TEST_CASE("Shape: Translation", "[aufgabe7.6") {
+TEST_CASE("Shape: Translation", "[aufgabe7.6]") {
 
 		// test lambda uses glm::translate()
 	auto translateLambda = [](glm::vec3 const& v, std::shared_ptr<Shape> const& s) {
@@ -924,7 +924,7 @@ TEST_CASE("Shape: Translation", "[aufgabe7.6") {
 	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
 }
 
-TEST_CASE("Shape: Scaling", "[aufgabe7.6") {
+TEST_CASE("Shape: Scaling", "[aufgabe7.6]") {
 
 		// test lambda uses glm::scale()
 	auto scaleLambda = [](glm::vec3 const& v, std::shared_ptr<Shape> const& s) {
@@ -978,7 +978,7 @@ TEST_CASE("Shape: Scaling", "[aufgabe7.6") {
 	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
 } 
 
-TEST_CASE("Shape: RotationX", "[aufgabe7.6") {
+TEST_CASE("Shape: RotationX", "[aufgabe7.6]") {
 	
 		// test lambda uses glm::rotate()
 	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
@@ -1032,7 +1032,7 @@ TEST_CASE("Shape: RotationX", "[aufgabe7.6") {
 
 }
 
-TEST_CASE("Shape: RotationY", "[aufgabe7.6") {
+TEST_CASE("Shape: RotationY", "[aufgabe7.6]") {
 	
 		// test lambda uses glm::rotate()
 	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
@@ -1086,7 +1086,7 @@ TEST_CASE("Shape: RotationY", "[aufgabe7.6") {
 
 }
 
-TEST_CASE("Shape: RotationZ", "[aufgabe7.6") {
+TEST_CASE("Shape: RotationZ", "[aufgabe7.6]") {
 	
 		// test lambda uses glm::rotate()
 	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
