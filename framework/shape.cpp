@@ -48,6 +48,12 @@ Matrix Shape::world_transformation_inv() const {
   return worldTransformInv_;
 }
 
+  // set worldTransform_
+void Shape::world_transformation(Matrix const& mat) {
+  worldTransform_ = mat;
+  worldTransformInv_ = glm::inverse(worldTransform_);
+}
+
   // prints shape object
 std::ostream& Shape::print(std::ostream& os) const {
   os << "Name: " << name_ << "\n" 
@@ -60,6 +66,7 @@ glm::vec3 Shape::calc_surface_pt(Ray const& ray, float distance) const {
   return surface_pt;
 }
 
+  // /!\ glm::mat4 [column][line], [Spalte][Zeile]
   // Translation: shifitng one point around a vector (q = T p)
 void Shape::translate(glm::vec3 const& v) {
   Matrix translateMat;

@@ -43,6 +43,8 @@ public:
   Material const& material() const;
   Matrix world_transformation() const;
   Matrix world_transformation_inv() const;
+    // setter
+  void world_transformation(Matrix const& mat);
 
 protected:
   std::string name_;

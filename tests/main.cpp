@@ -1,6 +1,7 @@
 // main.cpp (Programmiersprachen Aufgabenblatt 5)
 
 #define CATCH_CONFIG_RUNNER
+#define GLM_FORCE_RADIANS
 #include <catch.hpp>
 #include "shape.hpp"
 #include "sphere.hpp"
@@ -8,6 +9,7 @@
 #include "camera.hpp"
 #include "lightsource.hpp"
 #include "scene.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 /* ------------------ Aufgabe 5.2 ------------------ */
 
@@ -792,6 +794,349 @@ TEST_CASE("Composite: intersect() checks which hit point is nearest to the ray o
   REQUIRE(hit1.hit_ == hitComp.hit_);
   REQUIRE(hit1.distance_ > hitComp.distance_);
   REQUIRE(hit5.distance_ < hitComp.distance_);
+
+}
+
+/* ------------------ Aufgabe 7.6 ------------------ */
+
+TEST_CASE("Shape: set worldTransformInv_", "[aufgabe7.6") {
+
+	// /!\ glm::mat4 [column][line], [Spalte][Zeile]
+
+	auto s1 = std::make_shared<Sphere>();
+	glm::mat4 mat {1.0f, 1.0f, 1.0f, 1.0f,
+				   0.0f, 0.0f, 0.0f, 0.0f,
+				   1.0f, 1.0f, 1.0f, 1.0f,
+				   0.0f, 0.0f, 0.0f, 0.0f};
+	s1 -> world_transformation(mat);
+	REQUIRE(s1 -> world_transformation()[0].w == mat[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == mat[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == mat[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == mat[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == mat[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == mat[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == mat[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == mat[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == mat[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == mat[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == mat[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == mat[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == mat[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == mat[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == mat[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == mat[3].z);
+
+	// there's no inverse matrix to "mat"
+
+	auto b1 = std::make_shared<Box>();
+	glm::mat4 pat {1.4f, 1.0f, 1.0f, 1.0f,
+				   0.0f, 0.5f, 0.0f, 0.0f,
+				   1.0f, 1.0f, 1.6f, 1.0f,
+				   0.0f, 0.0f, 0.0f, 0.7f};
+    b1 -> world_transformation(pat);
+    REQUIRE(b1 -> world_transformation()[0].w == pat[0].w);
+    REQUIRE(b1 -> world_transformation()[0].x == pat[0].x);
+    REQUIRE(b1 -> world_transformation()[0].y == pat[0].y);
+    REQUIRE(b1 -> world_transformation()[0].z == pat[0].z);
+    REQUIRE(b1 -> world_transformation()[1].w == pat[1].w);
+    REQUIRE(b1 -> world_transformation()[1].x == pat[1].x);
+    REQUIRE(b1 -> world_transformation()[1].y == pat[1].y);
+    REQUIRE(b1 -> world_transformation()[1].z == pat[1].z);
+    REQUIRE(b1 -> world_transformation()[2].w == pat[2].w);
+    REQUIRE(b1 -> world_transformation()[2].x == pat[2].x);
+    REQUIRE(b1 -> world_transformation()[2].y == pat[2].y);
+    REQUIRE(b1 -> world_transformation()[2].z == pat[2].z);
+    REQUIRE(b1 -> world_transformation()[3].w == pat[3].w);
+    REQUIRE(b1 -> world_transformation()[3].x == pat[3].x);
+    REQUIRE(b1 -> world_transformation()[3].y == pat[3].y);
+    REQUIRE(b1 -> world_transformation()[3].z == pat[3].z);
+
+    glm::mat4 patInv = glm::inverse(pat);
+    REQUIRE(b1 -> world_transformation_inv()[0].w == patInv[0].w);
+    REQUIRE(b1 -> world_transformation_inv()[0].x == patInv[0].x);
+    REQUIRE(b1 -> world_transformation_inv()[0].y == patInv[0].y);
+    REQUIRE(b1 -> world_transformation_inv()[0].z == patInv[0].z);
+    REQUIRE(b1 -> world_transformation_inv()[1].w == patInv[1].w);
+    REQUIRE(b1 -> world_transformation_inv()[1].x == patInv[1].x);
+    REQUIRE(b1 -> world_transformation_inv()[1].y == patInv[1].y);
+    REQUIRE(b1 -> world_transformation_inv()[1].z == patInv[1].z);
+    REQUIRE(b1 -> world_transformation_inv()[2].w == patInv[2].w);
+    REQUIRE(b1 -> world_transformation_inv()[2].x == patInv[2].x);
+    REQUIRE(b1 -> world_transformation_inv()[2].y == patInv[2].y);
+    REQUIRE(b1 -> world_transformation_inv()[2].z == patInv[2].z);
+    REQUIRE(b1 -> world_transformation_inv()[3].w == patInv[3].w);
+    REQUIRE(b1 -> world_transformation_inv()[3].x == patInv[3].x);
+    REQUIRE(b1 -> world_transformation_inv()[3].y == patInv[3].y);
+    REQUIRE(b1 -> world_transformation_inv()[3].z == patInv[3].z);
+
+}
+
+TEST_CASE("Shape: Translation", "[aufgabe7.6") {
+
+		// test lambda uses glm::translate()
+	auto translateLambda = [](glm::vec3 const& v, std::shared_ptr<Shape> const& s) {
+		auto transMat = glm::translate(s -> world_transformation(), v);
+		s -> world_transformation(transMat * s -> world_transformation());
+	};
+
+	auto s1 = std::make_shared<Sphere>();
+	auto s2 = std::make_shared<Sphere>();
+	s1 -> translate(glm::vec3 {2.0f, 1.0f, 2.0f});
+	translateLambda(glm::vec3 {2.0f, 1.0f, 2.0f}, s2);
+
+	REQUIRE(s1 -> world_transformation()[0].w == s2 -> world_transformation()[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == s2 -> world_transformation()[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == s2 -> world_transformation()[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == s2 -> world_transformation()[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == s2 -> world_transformation()[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == s2 -> world_transformation()[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == s2 -> world_transformation()[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == s2 -> world_transformation()[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == s2 -> world_transformation()[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == s2 -> world_transformation()[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == s2 -> world_transformation()[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == s2 -> world_transformation()[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == s2 -> world_transformation()[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == s2 -> world_transformation()[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == s2 -> world_transformation()[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == s2 -> world_transformation()[3].z);
+
+	auto b1 = std::make_shared<Box>();
+	auto b2 = std::make_shared<Box>();
+	b1 -> translate(glm::vec3 {2.0f, 1.0f, 2.0f});
+	translateLambda(glm::vec3 {2.0f, 1.0f, 2.0f}, b2);
+
+	REQUIRE(b1 -> world_transformation()[0].w == b2 -> world_transformation()[0].w);
+	REQUIRE(b1 -> world_transformation()[0].x == b2 -> world_transformation()[0].x);
+	REQUIRE(b1 -> world_transformation()[0].y == b2 -> world_transformation()[0].y);
+	REQUIRE(b1 -> world_transformation()[0].z == b2 -> world_transformation()[0].z);
+	REQUIRE(b1 -> world_transformation()[1].w == b2 -> world_transformation()[1].w);
+	REQUIRE(b1 -> world_transformation()[1].x == b2 -> world_transformation()[1].x);
+	REQUIRE(b1 -> world_transformation()[1].y == b2 -> world_transformation()[1].y);
+	REQUIRE(b1 -> world_transformation()[1].z == b2 -> world_transformation()[1].z);
+	REQUIRE(b1 -> world_transformation()[2].w == b2 -> world_transformation()[2].w);
+	REQUIRE(b1 -> world_transformation()[2].x == b2 -> world_transformation()[2].x);
+	REQUIRE(b1 -> world_transformation()[2].y == b2 -> world_transformation()[2].y);
+	REQUIRE(b1 -> world_transformation()[2].z == b2 -> world_transformation()[2].z);
+	REQUIRE(b1 -> world_transformation()[3].w == b2 -> world_transformation()[3].w);
+	REQUIRE(b1 -> world_transformation()[3].x == b2 -> world_transformation()[3].x);
+	REQUIRE(b1 -> world_transformation()[3].y == b2 -> world_transformation()[3].y);
+	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
+}
+
+TEST_CASE("Shape: Scaling", "[aufgabe7.6") {
+
+		// test lambda uses glm::scale()
+	auto scaleLambda = [](glm::vec3 const& v, std::shared_ptr<Shape> const& s) {
+		auto scaleMat = glm::scale(s -> world_transformation(), v);
+		s -> world_transformation(scaleMat * s -> world_transformation());
+	};
+
+	auto s1 = std::make_shared<Sphere>();
+	auto s2 = std::make_shared<Sphere>();
+	s1 -> scale(glm::vec3 {2.0f, 2.0f, 2.0f});
+	scaleLambda(glm::vec3 {2.0f, 2.0f, 2.0f}, s2);
+
+	REQUIRE(s1 -> world_transformation()[0].w == s2 -> world_transformation()[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == s2 -> world_transformation()[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == s2 -> world_transformation()[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == s2 -> world_transformation()[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == s2 -> world_transformation()[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == s2 -> world_transformation()[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == s2 -> world_transformation()[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == s2 -> world_transformation()[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == s2 -> world_transformation()[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == s2 -> world_transformation()[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == s2 -> world_transformation()[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == s2 -> world_transformation()[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == s2 -> world_transformation()[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == s2 -> world_transformation()[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == s2 -> world_transformation()[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == s2 -> world_transformation()[3].z);
+
+
+	auto b1 = std::make_shared<Box>();
+	auto b2 = std::make_shared<Box>();
+	b1 -> scale(glm::vec3 {2.0f, 2.0f, 2.0f});
+	scaleLambda(glm::vec3 {2.0f, 2.0f, 2.0f}, b2);
+
+	REQUIRE(b1 -> world_transformation()[0].w == b2 -> world_transformation()[0].w);
+	REQUIRE(b1 -> world_transformation()[0].x == b2 -> world_transformation()[0].x);
+	REQUIRE(b1 -> world_transformation()[0].y == b2 -> world_transformation()[0].y);
+	REQUIRE(b1 -> world_transformation()[0].z == b2 -> world_transformation()[0].z);
+	REQUIRE(b1 -> world_transformation()[1].w == b2 -> world_transformation()[1].w);
+	REQUIRE(b1 -> world_transformation()[1].x == b2 -> world_transformation()[1].x);
+	REQUIRE(b1 -> world_transformation()[1].y == b2 -> world_transformation()[1].y);
+	REQUIRE(b1 -> world_transformation()[1].z == b2 -> world_transformation()[1].z);
+	REQUIRE(b1 -> world_transformation()[2].w == b2 -> world_transformation()[2].w);
+	REQUIRE(b1 -> world_transformation()[2].x == b2 -> world_transformation()[2].x);
+	REQUIRE(b1 -> world_transformation()[2].y == b2 -> world_transformation()[2].y);
+	REQUIRE(b1 -> world_transformation()[2].z == b2 -> world_transformation()[2].z);
+	REQUIRE(b1 -> world_transformation()[3].w == b2 -> world_transformation()[3].w);
+	REQUIRE(b1 -> world_transformation()[3].x == b2 -> world_transformation()[3].x);
+	REQUIRE(b1 -> world_transformation()[3].y == b2 -> world_transformation()[3].y);
+	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
+} 
+
+TEST_CASE("Shape: RotationX", "[aufgabe7.6") {
+	
+		// test lambda uses glm::rotate()
+	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
+		auto rotateMat = glm::rotate(s -> world_transformation(), phi, v);
+		s -> world_transformation(rotateMat * s -> world_transformation());
+	};
+
+	auto s1 = std::make_shared<Sphere>();
+	auto s2 = std::make_shared<Sphere>();
+	s1 -> rotateX(45.0f);
+	rotateLambda(glm::vec3 {1.0f, 0.0f, 0.0f}, 45.0f, s2);
+
+	REQUIRE(s1 -> world_transformation()[0].w == s2 -> world_transformation()[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == s2 -> world_transformation()[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == s2 -> world_transformation()[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == s2 -> world_transformation()[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == s2 -> world_transformation()[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == s2 -> world_transformation()[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == s2 -> world_transformation()[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == s2 -> world_transformation()[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == s2 -> world_transformation()[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == s2 -> world_transformation()[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == s2 -> world_transformation()[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == s2 -> world_transformation()[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == s2 -> world_transformation()[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == s2 -> world_transformation()[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == s2 -> world_transformation()[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == s2 -> world_transformation()[3].z);
+
+	auto b1 = std::make_shared<Box>();
+	auto b2 = std::make_shared<Box>();
+	b1 -> rotateX(70.0f);
+	rotateLambda(glm::vec3 {1.0f, 0.0f, 0.0f}, 70.0f, b2);
+
+	REQUIRE(b1 -> world_transformation()[0].w == b2 -> world_transformation()[0].w);
+	REQUIRE(b1 -> world_transformation()[0].x == b2 -> world_transformation()[0].x);
+	REQUIRE(b1 -> world_transformation()[0].y == b2 -> world_transformation()[0].y);
+	REQUIRE(b1 -> world_transformation()[0].z == b2 -> world_transformation()[0].z);
+	REQUIRE(b1 -> world_transformation()[1].w == b2 -> world_transformation()[1].w);
+	REQUIRE(b1 -> world_transformation()[1].x == b2 -> world_transformation()[1].x);
+	REQUIRE(b1 -> world_transformation()[1].y == b2 -> world_transformation()[1].y);
+	REQUIRE(b1 -> world_transformation()[1].z == b2 -> world_transformation()[1].z);
+	REQUIRE(b1 -> world_transformation()[2].w == b2 -> world_transformation()[2].w);
+	REQUIRE(b1 -> world_transformation()[2].x == b2 -> world_transformation()[2].x);
+	REQUIRE(b1 -> world_transformation()[2].y == b2 -> world_transformation()[2].y);
+	REQUIRE(b1 -> world_transformation()[2].z == b2 -> world_transformation()[2].z);
+	REQUIRE(b1 -> world_transformation()[3].w == b2 -> world_transformation()[3].w);
+	REQUIRE(b1 -> world_transformation()[3].x == b2 -> world_transformation()[3].x);
+	REQUIRE(b1 -> world_transformation()[3].y == b2 -> world_transformation()[3].y);
+	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
+
+}
+
+TEST_CASE("Shape: RotationY", "[aufgabe7.6") {
+	
+		// test lambda uses glm::rotate()
+	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
+		auto rotateMat = glm::rotate(s -> world_transformation(), phi, v);
+		s -> world_transformation(rotateMat * s -> world_transformation());
+	};
+
+	auto s1 = std::make_shared<Sphere>();
+	auto s2 = std::make_shared<Sphere>();
+	s1 -> rotateY(35.0f);
+	rotateLambda(glm::vec3 {0.0f, 1.0f, 0.0f}, 35.0f, s2);
+
+	REQUIRE(s1 -> world_transformation()[0].w == s2 -> world_transformation()[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == s2 -> world_transformation()[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == s2 -> world_transformation()[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == s2 -> world_transformation()[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == s2 -> world_transformation()[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == s2 -> world_transformation()[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == s2 -> world_transformation()[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == s2 -> world_transformation()[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == s2 -> world_transformation()[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == s2 -> world_transformation()[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == s2 -> world_transformation()[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == s2 -> world_transformation()[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == s2 -> world_transformation()[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == s2 -> world_transformation()[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == s2 -> world_transformation()[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == s2 -> world_transformation()[3].z);
+
+	auto b1 = std::make_shared<Box>();
+	auto b2 = std::make_shared<Box>();
+	b1 -> rotateY(12.0f);
+	rotateLambda(glm::vec3 {0.0f, 1.0f, 0.0f}, 12.0f, b2);
+
+	REQUIRE(b1 -> world_transformation()[0].w == b2 -> world_transformation()[0].w);
+	REQUIRE(b1 -> world_transformation()[0].x == b2 -> world_transformation()[0].x);
+	REQUIRE(b1 -> world_transformation()[0].y == b2 -> world_transformation()[0].y);
+	REQUIRE(b1 -> world_transformation()[0].z == b2 -> world_transformation()[0].z);
+	REQUIRE(b1 -> world_transformation()[1].w == b2 -> world_transformation()[1].w);
+	REQUIRE(b1 -> world_transformation()[1].x == b2 -> world_transformation()[1].x);
+	REQUIRE(b1 -> world_transformation()[1].y == b2 -> world_transformation()[1].y);
+	REQUIRE(b1 -> world_transformation()[1].z == b2 -> world_transformation()[1].z);
+	REQUIRE(b1 -> world_transformation()[2].w == b2 -> world_transformation()[2].w);
+	REQUIRE(b1 -> world_transformation()[2].x == b2 -> world_transformation()[2].x);
+	REQUIRE(b1 -> world_transformation()[2].y == b2 -> world_transformation()[2].y);
+	REQUIRE(b1 -> world_transformation()[2].z == b2 -> world_transformation()[2].z);
+	REQUIRE(b1 -> world_transformation()[3].w == b2 -> world_transformation()[3].w);
+	REQUIRE(b1 -> world_transformation()[3].x == b2 -> world_transformation()[3].x);
+	REQUIRE(b1 -> world_transformation()[3].y == b2 -> world_transformation()[3].y);
+	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
+
+}
+
+TEST_CASE("Shape: RotationZ", "[aufgabe7.6") {
+	
+		// test lambda uses glm::rotate()
+	auto rotateLambda = [](glm::vec3 const& v, float phi, std::shared_ptr<Shape> const& s) {
+		auto rotateMat = glm::rotate(s -> world_transformation(), phi, v);
+		s -> world_transformation(rotateMat * s -> world_transformation());
+	};
+
+	auto s1 = std::make_shared<Sphere>();
+	auto s2 = std::make_shared<Sphere>();
+	s1 -> rotateZ(78.0f);
+	rotateLambda(glm::vec3 {0.0f, 0.0f, 1.0f}, 78.0f, s2);
+
+	REQUIRE(s1 -> world_transformation()[0].w == s2 -> world_transformation()[0].w);
+	REQUIRE(s1 -> world_transformation()[0].x == s2 -> world_transformation()[0].x);
+	REQUIRE(s1 -> world_transformation()[0].y == s2 -> world_transformation()[0].y);
+	REQUIRE(s1 -> world_transformation()[0].z == s2 -> world_transformation()[0].z);
+	REQUIRE(s1 -> world_transformation()[1].w == s2 -> world_transformation()[1].w);
+	REQUIRE(s1 -> world_transformation()[1].x == s2 -> world_transformation()[1].x);
+	REQUIRE(s1 -> world_transformation()[1].y == s2 -> world_transformation()[1].y);
+	REQUIRE(s1 -> world_transformation()[1].z == s2 -> world_transformation()[1].z);
+	REQUIRE(s1 -> world_transformation()[2].w == s2 -> world_transformation()[2].w);
+	REQUIRE(s1 -> world_transformation()[2].x == s2 -> world_transformation()[2].x);
+	REQUIRE(s1 -> world_transformation()[2].y == s2 -> world_transformation()[2].y);
+	REQUIRE(s1 -> world_transformation()[2].z == s2 -> world_transformation()[2].z);
+	REQUIRE(s1 -> world_transformation()[3].w == s2 -> world_transformation()[3].w);
+	REQUIRE(s1 -> world_transformation()[3].x == s2 -> world_transformation()[3].x);
+	REQUIRE(s1 -> world_transformation()[3].y == s2 -> world_transformation()[3].y);
+	REQUIRE(s1 -> world_transformation()[3].z == s2 -> world_transformation()[3].z);
+
+	auto b1 = std::make_shared<Box>();
+	auto b2 = std::make_shared<Box>();
+	b1 -> rotateZ(5.0f);
+	rotateLambda(glm::vec3 {0.0f, 0.0f, 1.0f}, 5.0f, b2);
+
+	REQUIRE(b1 -> world_transformation()[0].w == b2 -> world_transformation()[0].w);
+	REQUIRE(b1 -> world_transformation()[0].x == b2 -> world_transformation()[0].x);
+	REQUIRE(b1 -> world_transformation()[0].y == b2 -> world_transformation()[0].y);
+	REQUIRE(b1 -> world_transformation()[0].z == b2 -> world_transformation()[0].z);
+	REQUIRE(b1 -> world_transformation()[1].w == b2 -> world_transformation()[1].w);
+	REQUIRE(b1 -> world_transformation()[1].x == b2 -> world_transformation()[1].x);
+	REQUIRE(b1 -> world_transformation()[1].y == b2 -> world_transformation()[1].y);
+	REQUIRE(b1 -> world_transformation()[1].z == b2 -> world_transformation()[1].z);
+	REQUIRE(b1 -> world_transformation()[2].w == b2 -> world_transformation()[2].w);
+	REQUIRE(b1 -> world_transformation()[2].x == b2 -> world_transformation()[2].x);
+	REQUIRE(b1 -> world_transformation()[2].y == b2 -> world_transformation()[2].y);
+	REQUIRE(b1 -> world_transformation()[2].z == b2 -> world_transformation()[2].z);
+	REQUIRE(b1 -> world_transformation()[3].w == b2 -> world_transformation()[3].w);
+	REQUIRE(b1 -> world_transformation()[3].x == b2 -> world_transformation()[3].x);
+	REQUIRE(b1 -> world_transformation()[3].y == b2 -> world_transformation()[3].y);
+	REQUIRE(b1 -> world_transformation()[3].z == b2 -> world_transformation()[3].z);
 
 }
 
