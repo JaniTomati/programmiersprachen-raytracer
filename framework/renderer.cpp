@@ -41,7 +41,7 @@ void Renderer::render() {
       // glm::vec3 direction(0, 0, -1.0);
       // Ray ray(origin, direction);
 
-      p.color = raytrace(ray, 1);
+      p.color = raytrace(ray, 2);
 
       write(p);
     }
@@ -139,13 +139,12 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
         float c1 = glm::dot(closest.normalen_vec_, v);
         // Überprüfung Kreuzprodukt (Winkelgröße)
         if (c1 < 0){
-          c1 -= c1;
-          q = 1/ri;
+          c1 = c1 * (-1.0f);
+          q = 1 / ri;
         }
-        // Bei 90° oder weniger
         else{
           q = ri;
-          closest.normalen_vec_ -= closest.normalen_vec_;
+          closest.normalen_vec_ = closest.normalen_vec_ * (-1.0f);
         }
         float c2 = 1 - q * q * (1 - c1 * c1);
         // Und nochmal eine Runde, diesmal aufs Haus!
@@ -165,14 +164,19 @@ Color Renderer::raytrace(Ray const& ray, unsigned int depth) {
         refraction_ray.origin_ += refraction_ray.direction_ * c;
 
         refraction_color = raytrace(refraction_ray, depth - 1);
+        
+        color = color + refraction_color * 0.33f;
       }
+      //color = color + reflection_color *
+      //speculatius + refraction_color;
       color = color + reflection_color * speculatius *
-        closest.closest_shape_->material().refraction(); //+ refraction_color * 0.1f;
+      closest.closest_shape_->material().refraction() * 0.4f;
+        //refraction_color * 0.3f;
     }
   }
   
   else {
-    color = Color(0,0,0.1f); // dark grey background
+    color = Color(0.6f,0.6f,0.7f); // dark grey background
   }
 
   return color;
