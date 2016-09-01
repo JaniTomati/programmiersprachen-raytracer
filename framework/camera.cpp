@@ -30,6 +30,16 @@ Camera::Camera(std::string const& name, double aovX, glm::vec3 const& ori, glm::
   transform_ {},
   transformInv_ {glm::inverse(transform_)} {}
 
+Camera::Camera(std::string const& name, double aovX, glm::vec3 const& ori, glm::vec3 const& dir, glm::vec3 const& up, 
+  Matrix const& transform) :
+  name_ {name},
+  aovX_ {aovX},
+  origin_ {ori},
+  direction_ {dir},
+  upVector_ {up},
+  transform_ {transform},
+  transformInv_ {glm::inverse(transform_)} {}
+
 Camera::~Camera() {}
 
 Ray Camera::calc_eye_ray(int x, int y, int height, int width) const {

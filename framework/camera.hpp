@@ -16,18 +16,19 @@ struct Camera {
   Camera();
   Camera(std::string const& name, double aovX);
   Camera(std::string const& name, double aovX, glm::vec3 const& ori, glm::vec3 const& dir, glm::vec3 const& up);
+  Camera(std::string const& name, double aovX, glm::vec3 const& ori, glm::vec3 const& dir, glm::vec3 const& up,
+    Matrix const& transform);
    // Destructor
   ~Camera();
 
+  std::ostream& print(std::ostream& os) const;
   Ray calc_eye_ray(int x, int y, int height, int width) const;
-  glm::mat4 transformCam() const;
     // added with exercise 7.6 (Transformations)
+  glm::mat4 transformCam() const;
   void translate(glm::vec3 const& v);
   void rotateX(float phi);
   void rotateY(float phi);
   void rotateZ(float phi);
-     // print camera
-  std::ostream& print(std::ostream& os) const;
 
    //member 
   std::string name_;
