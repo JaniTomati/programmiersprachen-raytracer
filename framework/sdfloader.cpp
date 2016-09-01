@@ -156,10 +156,11 @@ Scene loadSDF(std::string const& fileIn) {
           ss >> ambientLight.b;
 
             // new entry in light_ (ptr)
-          loadedScene.lights_.push_back(LightSource {lightName, lightPos, diffuseLight, ambientLight});
+          LightSource newLight {lightName, lightPos, diffuseLight, ambientLight};
+          loadedScene.lights_.push_back(newLight);
           ++vectorSizeLight;
 
-          std::cout << "Added Light: " << loadedScene.lights_[vectorSizeLight - 1] << std::endl;
+          std::cout << "Added Light: " << newLight << std::endl;
         }
 
           // Loads Camera # camera
@@ -204,6 +205,8 @@ Scene loadSDF(std::string const& fileIn) {
             ss >> s.z;
 
             (foundShape2 -> second) -> scale(s);
+            std::cout << "Scaling shape: " << shapeName << "\n" << "Scaling point" << "\n"
+                << "(" << s.x << ", " << s.y << ", " << s.z << ")" << " relativ to origin! \n"<< std::endl;
           }
 
           else if (keyword == "translate") {
@@ -213,6 +216,8 @@ Scene loadSDF(std::string const& fileIn) {
             ss >> v.z;
 
             (foundShape2 -> second) -> translate(v);
+            std::cout << "Translating shape: " << shapeName << "\n" << "Shifting around Vector " 
+                << "(" << v.x << ", " << v.y << ", " << v.z << ")! \n" << std::endl;
           }
 
           else if (keyword == "rotate") {
@@ -225,14 +230,66 @@ Scene loadSDF(std::string const& fileIn) {
 
             if (axis == glm::vec3 {1.0f, 0.0f, 0.0f}) {
               (foundShape2 -> second) -> rotateX(phi);
+              std::cout << "Rotating shape: " << shapeName << "\n" << "Rotation along x-axis" << "\n"
+                << "Phi: " << phi << "°! \n" << std::endl;
             }
 
             else if (axis == glm::vec3 {0.0f, 1.0f, 0.0f}) {
               (foundShape2 -> second) -> rotateY(phi);
+              std::cout << "Rotating shape: " << shapeName << "\n" << "Rotation along y-axis" << "\n"
+                << "Phi: " << phi << "°! \n"  << std::endl;
             }
 
             else if (axis == glm::vec3 {0.0f, 0.0f, 1.0f}) {
               (foundShape2 -> second) -> rotateZ(phi);
+              std::cout << "Rotating shape: " << shapeName << "\n" << "Rotation along z-axis" << "\n"
+                << "Phi: " << phi << "°! \n" <<std::endl;
+            } 
+
+            else {
+              std::cerr << "ERROR! Please enter a coordinate axis! \n" << std::endl;
+            }
+          }
+        }
+
+        else if (shapeName == loadedScene.cam_.name_) {
+          ss >> keyword;
+
+          if (keyword == "translate") {
+            glm::vec3 v;
+            ss >> v.x;
+            ss >> v.y;
+            ss >> v.z;
+
+            loadedScene.cam_.translate(v);
+            std::cout << "Translating camera: " << loadedScene.cam_.name_ << "\n" << "Shifting around Vector " 
+            << "(" << v.x << ", " << v.y << ", " << v.z << ")! \n" << std::endl;
+          }
+
+          else if (keyword == "rotate") {
+            float phi;
+            glm::vec3 axis;
+            ss >> phi;
+            ss >> axis.x;
+            ss >> axis.y;
+            ss >> axis.z;
+
+            if (axis == glm::vec3 {1.0f, 0.0f, 0.0f}) {
+              loadedScene.cam_.rotateX(phi);
+              std::cout << "Rotating camera: " << loadedScene.cam_.name_ << "\n" << "Rotation along x-axis" << "\n"
+              << "Phi: " << phi << "°! \n" <<std::endl;
+            }
+
+            else if (axis == glm::vec3 {0.0f, 1.0f, 0.0f}) {
+              loadedScene.cam_.rotateY(phi);
+              std::cout << "Camera: " << loadedScene.cam_.name_ << "\n" << "Rotation along y-axis" << "\n"
+              << "Phi: " << phi << "°! \n" <<std::endl;
+            }
+
+            else if (axis == glm::vec3 {0.0f, 0.0f, 1.0f}) {
+              loadedScene.cam_.rotateZ(phi);
+              std::cout << "Camera: " << loadedScene.cam_.name_ << "\n" << "Rotation along z-axis" << "\n"
+              << "Phi: " << phi << "°! \n" << std::endl;
             } 
 
             else {
@@ -246,7 +303,7 @@ Scene loadSDF(std::string const& fileIn) {
         } 
 
         else {
-          std::cerr << "ERROR! Shape " << shapeName << " could not be found!" << "\n" << std::endl;
+          std::cerr << "ERROR! Shape / Camera " << shapeName << " could not be found!" << "\n" << std::endl;
         }
       }
 

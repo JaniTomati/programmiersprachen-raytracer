@@ -8,6 +8,8 @@
 #include <iostream>
 #include "ray.hpp"
 
+typedef glm::mat4 Matrix;
+
 struct Camera {
 
    // Constructors 
@@ -19,7 +21,12 @@ struct Camera {
 
   Ray calc_eye_ray(int x, int y, int height, int width) const;
   glm::mat4 transformCam() const;
-   // print camera
+    // added with exercise 7.6 (Transformations)
+  void translate(glm::vec3 const& v);
+  void rotateX(float phi);
+  void rotateY(float phi);
+  void rotateZ(float phi);
+     // print camera
   std::ostream& print(std::ostream& os) const;
 
    //member 
@@ -28,6 +35,9 @@ struct Camera {
   glm::vec3 origin_; // {0.0f, 0.0f, 0.0f}
   glm::vec3 direction_; // negative z-axis 
   glm::vec3 upVector_; // camera orientation (which way is up?)
+    // added with exercise 7.6 (Transformations)
+  Matrix transform_;
+  Matrix transformInv_;
 
 };
 
