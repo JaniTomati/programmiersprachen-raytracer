@@ -1,8 +1,8 @@
 # materials 
-define material red .6 0 0 .5 .1 .1 .5 .5 .5 150 0
-define material green 0 .6 0 .1 .5 .1 .5 .5 .5 50 0
-define material blue 0 0 .6 .1 .1 .5 .5 .5 .5 30 0
-define material yellow .6 .6 0 .9 .9 .1 .8 .8 .8 50 0
+define material red .5 0 0 .5 .1 .1 .5 .5 .5 150 0
+define material green 0 .5 0 .1 .5 .1 .5 .5 .5 50 0
+define material blue 0 0 .5 .1 .1 .5 .5 .5 .5 30 0
+define material yellow .5 .5 0 .9 .9 .1 .8 .8 .8 50 0
 define material grey .05 .05 .05 .7 .7 .7 .4 .4 .4 15 0
 define material darkgrey 0.05 0.05 0.05 .2 .2 .2 .2 .2 .2 100 0
 define material glass 0 0 0 0 0 0 .5 .5 .5 400 1
@@ -23,8 +23,8 @@ define shape composite root asphere bsphere csphere dsphere ground background ab
 # light 
 # define light sun0 -7 4 4 .1 .1 .1 .6 .6 .6
 define light sun1 -7 4 4 .5 .5 .5 .2 .2 .3
-define light sun2 3 6 -2 .25 .25 .25 .1 .1 .3
-define light sun3 -8 7 -6 .15 .15 .15 .1 .1 .0
+define light sun2 3 6 -2 .25 .25 .25 .2 .2 .3
+define light sun3 -8 7 -6 .15 .15 .15 .1 .1 .05
 # camera 
 define camera eye 45.0 .1 0 1 0 0 -1 0 1 0
 # render 
