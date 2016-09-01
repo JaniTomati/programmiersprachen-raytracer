@@ -4,10 +4,14 @@
 //#include <sdfloader.hpp>
 
 int main(int argc, char* argv[]) {
-  Scene scene = loadSDF("../doc/BeispielSzene1.txt");
-  unsigned const width = scene.width_;
-  unsigned const height = scene.height_;
-  std::string const filename = scene.fileOut_;
+    // File cin 
+  std::string filePath;
+  std::cout << "Please enter the path to your file!" << std::endl;
+  std::cin >> filePath;
+  std::cout << "Importing and rendering " << filePath << "! \n" << std::endl;
+  Scene scene = loadSDF(filePath);
+
+  // Scene scene = loadSDF("../doc/BeispielSzene1.txt");
   // unsigned const width = 600;
   // unsigned const height = 600;
   // std::string const filename = "./checkerboard.ppm";
@@ -18,16 +22,16 @@ int main(int argc, char* argv[]) {
 
   std::thread thr([&app]() { app.render(); });
 
-  //Window win(glm::ivec2(scene.width_, scene.height_));
-  Window win(glm::ivec2(width,height));
+  Window win(glm::ivec2(scene.width_, scene.height_));
+  // Window win(glm::ivec2(width, height));
 
   while (!win.shouldClose()) {
     if (win.isKeyPressed(GLFW_KEY_ESCAPE)) {
       win.stop();
     }
 
-    //glDrawPixels(scene.width_, scene.height_, GL_RGB, GL_FLOAT
-    glDrawPixels( width, height, GL_RGB, GL_FLOAT
+    // glDrawPixels(width, height, GL_RGB, GL_FLOAT
+    glDrawPixels(scene.width_, scene.height_, GL_RGB, GL_FLOAT
                 , app.colorbuffer().data());
 
     win.update();
