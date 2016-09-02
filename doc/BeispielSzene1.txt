@@ -6,20 +6,24 @@ define material yellow .5 .5 0 .9 .9 .1 .8 .8 .8 50 0
 define material grey .05 .05 .05 .7 .7 .7 .4 .4 .4 15 0
 define material darkgrey 0.05 0.05 0.05 .2 .2 .2 .2 .2 .2 100 0
 define material glass 0 0 0 0 0 0 .5 .5 .5 400 1
+define material pinkglass .15 0 0 0.1 0 0 .5 .5 .5 400 1
+define material turkis 0 .4 .4 .1 .4 .4 .2 .6 .6 8 0
 # geometry 
 define shape sphere asphere -.3 -.85 -2.2 0.15 red
 define shape sphere bsphere 0 -.6 -3 .4 glass
 define shape sphere csphere .6 -.1 -4.5 .9 green
 define shape sphere dsphere .4 -.85 -1.8 0.15 blue
+define shape sphere esphere .2 1.3 -2.5 .2 pinkglass
+define shape sphere fsphere -.15 1.4 -2.7 .3 turkis
 define shape box abox  1.5 -1 -2.8 1.65 1 -3.4 green
 define shape box bbox  -.8 -1 -2.8 -1.2 .6 -4.5 blue
 define shape box cbox  -.8 .6 -2.9 -1.2 1 -3.3 red
-define shape box dbox  -.8 .6 -4 -1.2 1 -4.5 red
+define shape box dbox  -.8 .6 -4.1 -1.2 1 -4.5 red
 define shape box ebox  -1.5 1 -2.5 1.75 1.1 -4.5 yellow
 define shape box ground -60 -1 2 60 -2 -8 grey
 define shape box background -60 -1 -8 60 10 -9 darkgrey
 # composites
-define shape composite root asphere bsphere csphere dsphere ground background abox bbox cbox dbox ebox
+define shape composite root asphere bsphere csphere dsphere esphere fsphere ground background abox bbox cbox dbox ebox
 # light 
 # define light sun0 -7 4 4 .1 .1 .1 .6 .6 .6
 define light sun1 -7 4 4 .5 .5 .5 .2 .2 .3
